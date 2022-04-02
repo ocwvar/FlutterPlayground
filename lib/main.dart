@@ -10,30 +10,21 @@ void main() {
 
 class PlaygroundApp extends StatelessWidget {
   const PlaygroundApp({Key? key}) : super(key: key);
+  final Color _defaultThemeColor = Colors.pink;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) {
-          final ThemeViewModel viewModel = ThemeViewModel();
-          viewModel.changeThemeColor(Colors.pink, false);
-          return viewModel;
+          return ThemeViewModel(_defaultThemeColor);
         },
         child: Consumer<ThemeViewModel>(
           builder: (context, viewModel, child) {
 
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                brightness: Brightness.light,
-                primaryColor: viewModel.currentThemeColor(),
-                primarySwatch: viewModel.currentThemeColor(),
-              ),
-              darkTheme: ThemeData(
-                brightness: Brightness.dark,
-                primaryColor: viewModel.currentThemeColor(),
-                primarySwatch: viewModel.currentThemeColor(),
-              ),
+              theme: viewModel.getThemeData(false),
+              darkTheme: viewModel.getThemeData(true),
               themeMode: viewModel.currentMode(),
               home: Scaffold(
                 appBar: createAppBar(context, "Playground", false),
