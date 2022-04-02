@@ -64,9 +64,13 @@ class _HomeView extends State<HomeView> {
   /// @return [Widget]
   Widget createThemeColorPanel(BuildContext context) {
     Widget wrapCard(Color targetColor) {
-      return InkWell(
-        onTap: () => widget._viewModel.changeThemeColor(targetColor, true),
-        child: Card(color: targetColor, child: const SizedBox(width: 50, height: 50)),
+      return ElevatedButton(
+          onPressed: () => widget._viewModel.changeThemeColor(targetColor, true),
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(targetColor),
+              fixedSize: MaterialStateProperty.all(const Size(50.0, 50.0))
+          ),
+          child: const SizedBox(width: 50, height: 50)
       );
     }
 
