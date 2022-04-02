@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/base/theme_view_model.dart';
 import 'package:flutter_playground/page/dynamic_list/view.dart';
+import 'package:flutter_playground/page/remote_image/view.dart';
 import 'package:flutter_playground/widget/list_item.dart';
 
 import 'model.dart';
@@ -130,6 +131,22 @@ class _HomeView extends State<HomeView> {
   /// get list item widget to display
   /// @return [Widget] of list item
   Widget createPageListView(BuildContext context, HomeModel model, int index) {
+
+    /// find a [Widget] page is match given [PageType]
+    /// @return [Widget] maybe NULL if not matching
+    Widget? findPageByType(PageType type) {
+      switch (type) {
+        case PageType.dynamicList:
+          return const DynamicListView();
+
+        case PageType.remoteImage:
+          return const RemoteImageView();
+
+        default:
+          return null;
+      }
+    }
+
     final PageModel pageModel = model.pages[index];
     final Widget? page = findPageByType(pageModel.pageType);
 
@@ -140,17 +157,5 @@ class _HomeView extends State<HomeView> {
     };
 
     return createListItem(context, pageModel.title, true, onClick);
-  }
-
-  /// find a [Widget] page is match given [PageType]
-  /// @return [Widget] maybe NULL if not matching
-  Widget? findPageByType(PageType type) {
-    switch (type) {
-      case PageType.dynamicList:
-        return const DynamicListView();
-
-      default:
-        return null;
-    }
   }
 }
