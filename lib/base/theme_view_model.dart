@@ -4,18 +4,25 @@ import 'package:flutter/material.dart';
 
 class ThemeViewModel extends ChangeNotifier {
 
-  DayNightType _currentType = DayNightType.followSystem;
-  late MaterialColor _currentThemeColor;
+  final Color _defaultThemeColor;
 
+  DayNightType _currentType = DayNightType.followSystem;
+  late MaterialColor _currentThemeColor = _convertColor2MaterialColor(_defaultThemeColor);
+
+  ThemeViewModel(this._defaultThemeColor);
+
+  /// change day-night type
   void changeType(DayNightType type) {
     _currentType = type;
     notifyListeners();
   }
 
+  /// @return [DayNightType] current day-night type
   DayNightType currentType() {
     return _currentType;
   }
 
+  /// @return [ThemeMode] current theme mode
   ThemeMode currentMode() {
     switch(_currentType) {
       case DayNightType.light:
@@ -29,10 +36,9 @@ class ThemeViewModel extends ChangeNotifier {
     }
   }
 
-  MaterialColor currentThemeColor() {
-    return _currentThemeColor;
-  }
-
+  /// change current theme color and notice app theme change
+  /// @param [Color] color : color you want to change to
+  /// @param [bool] needNotifyListeners: need to update to listener
   void changeThemeColor(Color color, bool needNotifyListeners) {
     _currentThemeColor = _convertColor2MaterialColor(color);
     if (needNotifyListeners) {
@@ -40,6 +46,21 @@ class ThemeViewModel extends ChangeNotifier {
     }
   }
 
+  /// get current theme with custom color
+  /// @param [bool] whether is Dark theme
+  /// @return [ThemeData]
+  ThemeData getThemeData(bool isDark) {
+    return ThemeData(
+      brightness: isDark? Brightness.dark : Brightness.light,
+      primaryColor: _currentThemeColor,
+      primarySwatch: _currentThemeColor
+    );
+  }
+
+  /// convert given [Color] into [MaterialColor]
+  /// with different level of brightness from 50 to 900
+  /// @param [Color]
+  /// @return [MaterialColor] can be used as [ThemeData.primaryColor] and [ThemeData.primarySwatch]
   MaterialColor _convertColor2MaterialColor(Color color) {
     Color changeBrightness(Color color, double value) {
       final HSLColor hslColor = HSLColor.fromColor(color);
