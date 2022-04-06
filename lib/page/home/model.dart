@@ -1,6 +1,7 @@
 class HomeModel {
   /// page type list
   final List<PageModel> pages = [
+    PageModel("Text styles", PageType.textStyles),
     PageModel("Dynamic list content", PageType.dynamicList),
     PageModel("Remote image fetching", PageType.remoteImage),
     PageModel("Multi language support", PageType.multiLanguage),
@@ -15,6 +16,6 @@ class PageModel {
   PageModel(this.title, this.pageType);
 }
 
-enum PageType { dynamicList, remoteImage, multiLanguage, platformSpecific }
+enum PageType { textStyles, dynamicList, remoteImage, multiLanguage, platformSpecific }
 
 
