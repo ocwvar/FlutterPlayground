@@ -8,3 +8,4 @@ Flutter demo
 - Theme color changing
 - Remote image download
 - Dynamic list content
+- l10n
