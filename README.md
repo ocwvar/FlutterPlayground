@@ -10,3 +10,4 @@ Flutter demo
 - Dynamic list content
 - L10n support
 - CrossPlatform function calling
+- Accessibility
