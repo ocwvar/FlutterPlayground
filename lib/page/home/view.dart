@@ -4,6 +4,7 @@ import 'package:flutter_playground/page/dynamic_list/view.dart';
 import 'package:flutter_playground/page/language/view.dart';
 import 'package:flutter_playground/page/platform/view.dart';
 import 'package:flutter_playground/page/remote_image/view.dart';
+import 'package:flutter_playground/page/system_info/view.dart';
 import 'package:flutter_playground/widget/list_item.dart';
 
 import '../text_styles/view.dart';
@@ -145,6 +146,9 @@ class _HomeView extends State<HomeView> {
       switch (type) {
         case PageType.textStyles:
           return const TextStylesView();
+
+        case PageType.systemInfo:
+          return const SystemInfoView();
 
         case PageType.dynamicList:
           return const DynamicListView();

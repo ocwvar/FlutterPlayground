@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/language/model.dart';
 import 'package:flutter_playground/widget/app_bar.dart';
@@ -25,6 +27,9 @@ class _LanguageView extends State<LanguageView> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text("Current system locale", style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.left,),
+            Text(Platform.localeName),
+            const SizedBox(height: 20,),
             Text("Local control", style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.left,),
             SizedBox(
                 width: double.infinity,
