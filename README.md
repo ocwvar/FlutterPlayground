@@ -8,5 +8,5 @@ Flutter demo
 - Theme color changing
 - Remote image download
 - Dynamic list content
-- l10n
+- L10n support
 - CrossPlatform function calling
