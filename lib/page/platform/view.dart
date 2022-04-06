@@ -45,6 +45,7 @@ class _PlatformCodeView extends State<PlatformCodeView> {
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("System version", style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.left,),
             const SizedBox(height: 20,),
