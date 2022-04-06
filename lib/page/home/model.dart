@@ -4,6 +4,7 @@ class HomeModel {
     PageModel("Dynamic list content", PageType.dynamicList),
     PageModel("Remote image fetching", PageType.remoteImage),
     PageModel("Multi language support", PageType.multiLanguage),
+    PageModel("Platform specific code calling", PageType.platformSpecific),
   ];
 }
 
@@ -14,6 +15,6 @@ class PageModel {
   PageModel(this.title, this.pageType);
 }
 
-enum PageType { dynamicList, remoteImage, multiLanguage }
+enum PageType { dynamicList, remoteImage, multiLanguage, platformSpecific }
 
 
