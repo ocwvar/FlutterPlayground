@@ -9,3 +9,4 @@ Flutter demo
 - Remote image download
 - Dynamic list content
 - l10n
+- CrossPlatform function calling
