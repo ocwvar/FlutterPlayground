@@ -6,6 +6,7 @@ import 'package:flutter_playground/page/platform/view.dart';
 import 'package:flutter_playground/page/remote_image/view.dart';
 import 'package:flutter_playground/widget/list_item.dart';
 
+import '../text_styles/view.dart';
 import 'model.dart';
 
 class HomeView extends StatefulWidget {
@@ -142,6 +143,9 @@ class _HomeView extends State<HomeView> {
     /// @return [Widget] maybe NULL if not matching
     Widget? findPageByType(PageType type) {
       switch (type) {
+        case PageType.textStyles:
+          return const TextStylesView();
+
         case PageType.dynamicList:
           return const DynamicListView();
 
