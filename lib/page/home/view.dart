@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/base/theme_view_model.dart';
 import 'package:flutter_playground/page/dynamic_list/view.dart';
+import 'package:flutter_playground/page/language/view.dart';
 import 'package:flutter_playground/page/remote_image/view.dart';
 import 'package:flutter_playground/widget/list_item.dart';
 
@@ -145,6 +146,9 @@ class _HomeView extends State<HomeView> {
 
         case PageType.remoteImage:
           return const RemoteImageView();
+
+        case PageType.multiLanguage:
+          return LanguageView();
 
         default:
           return null;

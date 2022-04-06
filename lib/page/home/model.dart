@@ -3,6 +3,7 @@ class HomeModel {
   final List<PageModel> pages = [
     PageModel("Dynamic list content", PageType.dynamicList),
     PageModel("Remote image fetching", PageType.remoteImage),
+    PageModel("Multi language support", PageType.multiLanguage),
   ];
 }
 
@@ -13,6 +14,6 @@ class PageModel {
   PageModel(this.title, this.pageType);
 }
 
-enum PageType { dynamicList, remoteImage }
+enum PageType { dynamicList, remoteImage, multiLanguage }
 
 
