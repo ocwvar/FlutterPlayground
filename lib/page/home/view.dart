@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/base/theme_view_model.dart';
+import 'package:flutter_playground/page/accessibility/view.dart';
 import 'package:flutter_playground/page/dynamic_list/view.dart';
 import 'package:flutter_playground/page/language/view.dart';
 import 'package:flutter_playground/page/platform/view.dart';
@@ -161,6 +162,9 @@ class _HomeView extends State<HomeView> {
 
         case PageType.platformSpecific:
           return const PlatformCodeView();
+
+        case PageType.accessibility:
+          return const AccessibilityView();
 
         default:
           return null;
