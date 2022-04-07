@@ -8,6 +8,7 @@ class HomeModel {
     PageModel("Multi language support", PageType.multiLanguage),
     PageModel("Platform specific code calling", PageType.platformSpecific),
     PageModel("Accessibility", PageType.accessibility),
+    PageModel("Page state keeping", PageType.keepState),
   ];
 }
 
@@ -25,7 +26,8 @@ enum PageType {
   remoteImage,
   multiLanguage,
   platformSpecific,
-  accessibility
+  accessibility,
+  keepState
 }
 
 
