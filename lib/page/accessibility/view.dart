@@ -11,7 +11,9 @@ class AccessibilityView extends StatefulWidget {
 
 class _AccessibilityView extends State<AccessibilityView> {
 
-  final String text = "message text";
+  final String _text = "message text";
+
+  bool _hasFocus = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +25,12 @@ class _AccessibilityView extends State<AccessibilityView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("Regular text", style: Theme.of(context).textTheme.titleLarge,),
-            Text(text),
+            Text(_text),
             const SizedBox(height: 20,),
 
             Text("Heading", style: Theme.of(context).textTheme.titleLarge,),
             Semantics(
-              child: Text(text),
+              child: Text(_text),
               header: true,
             ),
             const SizedBox(height: 20,),
@@ -44,7 +46,7 @@ class _AccessibilityView extends State<AccessibilityView> {
 
             Text("Button", style: Theme.of(context).textTheme.titleLarge,),
             Semantics(
-              child: Text(text),
+              child: Text(_text),
               button: true,
             ),
             const SizedBox(height: 20,),
@@ -73,7 +75,6 @@ class _AccessibilityView extends State<AccessibilityView> {
                   ),
                 ),
               ),
-              container: true,
               value: "Jimmy is an Android developer",
             ),
             const SizedBox(height: 20,),
@@ -85,20 +86,16 @@ class _AccessibilityView extends State<AccessibilityView> {
                   children: [
                     Checkbox(value: false, onChanged: (value){},),
                     Switch(value: false, onChanged: (value){},),
+                    Radio(value: true, groupValue: false ,onChanged: (value){},),
                   ],
                 ),
                 Column(
                   children: [
                     Checkbox(value: true, onChanged: (value){},),
                     Switch(value: true, onChanged: (value){},),
+                    Radio(value: false, groupValue: false ,onChanged: (value){},),
                   ],
-                ),
-                Column(
-                  children: [
-                    Checkbox(value: true, onChanged: (value){},),
-                    Switch(value: true, onChanged: (value){},),
-                  ],
-                ),
+                )
               ],
             ),
             const SizedBox(height: 20,),
@@ -108,9 +105,38 @@ class _AccessibilityView extends State<AccessibilityView> {
               SemanticsService.announce("Hello there", TextDirection.ltr);
             }, child: const Text("Speck")),
             const SizedBox(height: 20,),
+
+            Text("Focus status", style: Theme.of(context).textTheme.titleLarge,),
+            Semantics(
+              child: getTextByFocusStatus(),
+              onDidGainAccessibilityFocus: () => setState(() {
+                _hasFocus = true;
+              }),
+              onDidLoseAccessibilityFocus: () => setState(() {
+                _hasFocus = false;
+              }),
+            ),
+            const SizedBox(height: 20,),
           ],
         ),
       ),
     );
   }
+
+  Widget getTextByFocusStatus() {
+    TextStyle style;
+    String text;
+    if (_hasFocus) {
+      text = "HAS FOCUS";
+      style = const TextStyle(color: Colors.lightGreenAccent);
+    } else {
+      text = "LOST FOCUS";
+      style = const TextStyle(color: Colors.redAccent);
+    }
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Text(text, style: style,),
+    );
+  }
+
 }
