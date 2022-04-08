@@ -13,6 +13,7 @@ class AccountListView extends StatefulWidget {
 
 class _AccountListView extends State<AccountListView> {
 
+  final int _maxAccountCardNumber = 6;
   final Map<int, FocusNode> _nodes = {};
 
   @override
@@ -32,13 +33,10 @@ class _AccountListView extends State<AccountListView> {
         create: (context) => AccountListViewModel(),
         child: Consumer<AccountListViewModel>(
           builder: (context, viewModel, child) {
-
+            // we init the account card list with one item
+            // and we should keep there at less one card in list
             if (viewModel.displayList.isEmpty) {
-              for(int i = 0; i < 12; i++) {
-                final Account account = Account.create();
-                _nodes[account.id] = FocusNode();
-                viewModel.update(account, false);
-              }
+              _addNewAccountCard(viewModel, false);
             }
 
             return Column(
@@ -49,6 +47,12 @@ class _AccountListView extends State<AccountListView> {
                       separatorBuilder: (context, index) => const SizedBox(height: 8,),
                       padding: const EdgeInsets.all(8),
                       itemBuilder: (context, index) {
+                        // for the last one, should be "add account" button
+                        if (index == viewModel.displayList.length) {
+                          final bool reachLimit = viewModel.displayList.length == _maxAccountCardNumber;
+                          return AddAccountButtonView.create(context, reachLimit, () => _addNewAccountCard(viewModel, true));
+                        }
+
                         final AccountDisplayModel model = viewModel.displayList[index];
                         final FocusNode? node = _nodes[model.account.id];
                         if (node == null) {
@@ -57,7 +61,8 @@ class _AccountListView extends State<AccountListView> {
 
                         return AccountCardView.create(context, node, viewModel, index);
                       },
-                      itemCount: viewModel.displayList.length,
+                      // the last one should be "add account" button
+                      itemCount: viewModel.displayList.length + 1,
                     )
                 )
               ],
@@ -68,11 +73,24 @@ class _AccountListView extends State<AccountListView> {
     );
   }
 
+  /// add new account card to view
+  void _addNewAccountCard(AccountListViewModel viewModel, bool needUpdate) {
+    final Account account = Account.create();
+    _nodes[account.id] = FocusNode();
+    viewModel.update(account, needUpdate);
+  }
+
 }
 
 class AccountCardView {
 
-  static Widget create(BuildContext context, FocusNode accountNoFocusNode, AccountListViewModel viewModel, int index) {
+  /// create a [Widget] has account info
+  static Widget create(
+      BuildContext context,
+      FocusNode accountNoFocusNode,
+      AccountListViewModel viewModel,
+      int index)
+  {
     final AccountDisplayModel model = viewModel.displayList[index];
 
     return Card(
@@ -82,7 +100,6 @@ class AccountCardView {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             // column 1 -- account number and delete button
             Row(
               children: [
@@ -180,13 +197,16 @@ class AccountCardView {
   /// @return [Widget]
   static Widget deleteButtonVisibilityOf(AccountListViewModel viewModel, AccountDisplayModel model) {
     if (viewModel.displayList.length > 1) {
-      return IconButton(
-          onPressed: () => viewModel.remove(model.account.id),
-          icon: const Icon(Icons.highlight_remove)
+      return InkWell(
+        onTap: () => viewModel.remove(model.account.id),
+        child: const Padding(
+          padding: EdgeInsets.all(8),
+          child: Icon(Icons.highlight_remove),
+        ),
       );
     }
 
-    return const SizedBox();
+    return const SizedBox.shrink();
   }
 
   /// get [InputDecoration] by state of given [Balance]
@@ -219,6 +239,26 @@ class AccountCardView {
              text: account.accountNo
          )
      );
+  }
+
+}
+
+class AddAccountButtonView {
+
+  static Widget create(BuildContext context, bool reachLimit, Function() onClick){
+    return InkWell(
+      onTap: () => onClick(),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: const [
+            Icon(Icons.add_circle_outline),
+            SizedBox(width: 20,),
+            Text("Add account")
+          ],
+        ),
+      ),
+    );
   }
 
 }
