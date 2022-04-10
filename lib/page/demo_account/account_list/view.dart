@@ -20,6 +20,11 @@ class _AccountListView extends State<AccountListView> {
   // second focus node is for "Account balance" input field
   final Map<int, Pair<FocusNode, FocusNode>> _itemInputFocusNodes = {};
 
+  /// Scroll controller for content list
+  /// use this to achieve scroll down to bottom
+  /// when added a new item into content list
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void dispose() {
     for (var element in _itemInputFocusNodes.entries) {
@@ -49,6 +54,7 @@ class _AccountListView extends State<AccountListView> {
               children: [
                 Expanded(
                     child: ListView.separated(
+                      controller: _scrollController,
                       separatorBuilder: (context, index) => const SizedBox(height: 8,),
                       padding: const EdgeInsets.all(8),
                       itemBuilder: (context, index) {
@@ -85,6 +91,18 @@ class _AccountListView extends State<AccountListView> {
     final Account account = Account.create();
     _itemInputFocusNodes[account.id] = Pair(FocusNode(), FocusNode());
     viewModel.update(account, needUpdate);
+    _scrollDown2Bottom();
+  }
+
+  /// scroll content list down to bottom
+  void _scrollDown2Bottom() {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut
+      );
+    });
   }
 
 }
