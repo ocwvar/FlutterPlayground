@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/base/pair.dart';
 import 'package:flutter_playground/page/demo_account/account_list/view_model.dart';
 import 'package:flutter_playground/page/demo_account/models/account.dart';
 import 'package:provider/provider.dart';
@@ -14,12 +15,16 @@ class AccountListView extends StatefulWidget {
 class _AccountListView extends State<AccountListView> {
 
   final int _maxAccountCardNumber = 6;
-  final Map<int, FocusNode> _nodes = {};
+
+  // first focus node is for "Account number" input field
+  // second focus node is for "Account balance" input field
+  final Map<int, Pair<FocusNode, FocusNode>> _itemInputFocusNodes = {};
 
   @override
   void dispose() {
-    for (var element in _nodes.entries) {
-      element.value.dispose();
+    for (var element in _itemInputFocusNodes.entries) {
+      element.value.value1.dispose();
+      element.value.value2.dispose();
     }
 
     super.dispose();
@@ -54,12 +59,14 @@ class _AccountListView extends State<AccountListView> {
                         }
 
                         final AccountDisplayModel model = viewModel.displayList[index];
-                        final FocusNode? node = _nodes[model.account.id];
-                        if (node == null) {
-                          return const SizedBox();
+                        final FocusNode? accountNoFocusNode = _itemInputFocusNodes[model.account.id]?.value1;
+                        final FocusNode? accountBalanceFocusNode = _itemInputFocusNodes[model.account.id]?.value2;
+                        if (accountNoFocusNode == null || accountBalanceFocusNode == null) {
+                          // if we cant get focus, then we just ignore it
+                          return const SizedBox.shrink();
                         }
 
-                        return AccountCardView.create(context, node, viewModel, index);
+                        return AccountCardView.create(context, accountNoFocusNode, accountBalanceFocusNode, viewModel, index);
                       },
                       // the last one should be "add account" button
                       itemCount: viewModel.displayList.length + 1,
@@ -76,7 +83,7 @@ class _AccountListView extends State<AccountListView> {
   /// add new account card to view
   void _addNewAccountCard(AccountListViewModel viewModel, bool needUpdate) {
     final Account account = Account.create();
-    _nodes[account.id] = FocusNode();
+    _itemInputFocusNodes[account.id] = Pair(FocusNode(), FocusNode());
     viewModel.update(account, needUpdate);
   }
 
@@ -88,6 +95,7 @@ class AccountCardView {
   static Widget create(
       BuildContext context,
       FocusNode accountNoFocusNode,
+      FocusNode accountBalanceFocusNode,
       AccountListViewModel viewModel,
       int index)
   {
@@ -137,15 +145,12 @@ class AccountCardView {
                 textInputAction: TextInputAction.done,
                 maxLength: 20,
                 keyboardType: TextInputType.number,
+                focusNode: accountBalanceFocusNode,
                 onChanged: (text) {
                   model.account.balance.updateValueWithString(text);
-                  viewModel.update(model.account, false);
+                  viewModel.update(model.account, true);
                 },
-                controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                        text: model.account.balance.getDisplayString()
-                    )
-                ),
+                controller: getAccountBalanceControlOf(model.account, accountBalanceFocusNode),
               ),
             )
           ],
@@ -239,6 +244,18 @@ class AccountCardView {
              text: account.accountNo
          )
      );
+  }
+
+  /// same as [getAccountNoControlOf]
+  static TextEditingController? getAccountBalanceControlOf(Account account, FocusNode focusNode) {
+    if (focusNode.hasFocus) {
+      return null;
+    }
+    return TextEditingController.fromValue(
+        TextEditingValue(
+            text: account.balance.getDisplayString()
+        )
+    );
   }
 
 }
