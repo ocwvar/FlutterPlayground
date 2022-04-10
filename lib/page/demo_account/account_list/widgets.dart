@@ -10,6 +10,7 @@ class AccountCardView {
       FocusNode accountNoFocusNode,
       FocusNode accountBalanceFocusNode,
       AccountListViewModel viewModel,
+      Function() onSelectAccountType,
       int index)
   {
     final AccountDisplayModel model = viewModel.displayList[index];
@@ -28,6 +29,25 @@ class AccountCardView {
                 const Spacer(),
                 deleteButtonVisibilityOf(viewModel, model)
               ],
+            ),
+
+            // account type selection
+            SizedBox(
+              width: double.infinity,
+              child: InkWell(
+                onTap: onSelectAccountType,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Account Type", style: Theme.of(context).textTheme.titleMedium),
+                      const SizedBox(height: 6,),
+                      Text(getAccountTypeDesc(model.account), style: Theme.of(context).textTheme.caption)
+                    ],
+                  ),
+                ),
+              ),
             ),
 
             // account no input field
@@ -72,6 +92,17 @@ class AccountCardView {
     );
   }
 
+  static String getAccountTypeDesc(Account account) {
+    final String name = account.type?.typeName ?? "";
+    final String desc = account.type?.description ?? "";
+
+    if (desc.isEmpty || name.isEmpty) {
+      return "Please select your account type";
+    } else {
+      return name + " - " + desc;
+    }
+  }
+
   /// get [InputDecoration] by state of given [AccountDisplayModel]
   /// there will have 3 state:
   /// 1. no account number
@@ -82,6 +113,7 @@ class AccountCardView {
     // state of duplicated
     if (model.isDuplicated) {
       return const InputDecoration(
+          labelText: "Account number",
           errorText: "This account number is duplicated",
           errorStyle: TextStyle(color: Colors.redAccent)
       );
@@ -90,6 +122,7 @@ class AccountCardView {
     // state of empty account number
     if (model.account.accountNo.isEmpty) {
       return const InputDecoration(
+        labelText: "Account number",
         suffixText: "example 123456-567890",
         errorText: "Please input account number",
       );
@@ -98,6 +131,7 @@ class AccountCardView {
     // state of invalid format of account number
     if (model.isInvalidFormat) {
       return const InputDecoration(
+          labelText: "Account number",
           errorText: "Account number format is invalid",
           suffixText: "example 123456-567890",
           errorStyle: TextStyle(color: Colors.deepOrangeAccent)

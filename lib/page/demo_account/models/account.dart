@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter_playground/page/demo_account/models/account_types.dart';
 import 'package:flutter_playground/page/demo_account/models/currency.dart';
 
 class AccountDisplayModel {
@@ -8,20 +9,18 @@ class AccountDisplayModel {
   bool isInvalidFormat = false;
 
   AccountDisplayModel(this.account);
-
-  void printInfo() {
-    print("### isDuplicated[$isDuplicated] isInvalidFormat[$isInvalidFormat] Account.id[${account.id}] Account.no[${account.accountNo}] Balance.value[${account.balance.value}] Balance.currency[${account.balance.currency}]");
-  }
 }
 
 class Account {
   final int id;
   final Balance _balance = Balance();
+  AccountTypeDetail? _typeDetail;
   Account(this.id);
 
   String _accountNo = "";
   String get accountNo => _accountNo;
   Balance get balance => _balance;
+  AccountTypeDetail? get type => _typeDetail;
 
   static Account create() {
     return Account(Random().nextInt(100000));
@@ -29,6 +28,10 @@ class Account {
 
   void updateAccountNo(String newNo) {
     _accountNo = newNo;
+  }
+
+  void updateAccountType(AccountTypeDetail typeDetail) {
+    _typeDetail = typeDetail;
   }
 
 }

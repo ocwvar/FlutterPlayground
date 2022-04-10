@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_playground/base/pair.dart';
 import 'package:flutter_playground/page/demo_account/account_list/view_model.dart';
 import 'package:flutter_playground/page/demo_account/account_list/widgets.dart';
+import 'package:flutter_playground/page/demo_account/account_type/view.dart';
 import 'package:flutter_playground/page/demo_account/models/account.dart';
+import 'package:flutter_playground/page/demo_account/models/account_types.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widget/app_bar.dart';
@@ -73,7 +75,14 @@ class _AccountListView extends State<AccountListView> {
                           return const SizedBox.shrink();
                         }
 
-                        return AccountCardView.create(context, accountNoFocusNode, accountBalanceFocusNode, viewModel, index);
+                        return AccountCardView.create(
+                            context,
+                            accountNoFocusNode,
+                            accountBalanceFocusNode,
+                            viewModel,
+                            () => _onSelectAccountType(context, viewModel, model.account),
+                            index
+                        );
                       },
                       // the last one should be "add account" button
                       itemCount: viewModel.displayList.length + 1,
@@ -105,5 +114,16 @@ class _AccountListView extends State<AccountListView> {
       );
     });
   }
-}
 
+  /// call when user clicked "Account Type"
+  /// @param [index] which item has been clicked
+  void _onSelectAccountType(BuildContext context, AccountListViewModel viewModel, Account account) async {
+    final AccountTypeDetail? result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AccountTypeView()));
+    if (result == null) {
+      return;
+    }
+
+    account.updateAccountType(result);
+    viewModel.update(account, true);
+  }
+}
