@@ -12,8 +12,6 @@ class AccountListViewModel extends ChangeNotifier {
     /// try to get from source list first
     final Account item = _getAccountById(account.id) ?? account;
     item.updateAccountNo(account.accountNo);
-    item.balance.updateValue(account.balance.value);
-    item.balance.updateCurrency(account.balance.currency);
     _addOrUpdate(item, needRefresh);
   }
 

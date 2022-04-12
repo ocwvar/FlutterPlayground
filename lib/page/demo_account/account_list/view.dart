@@ -21,7 +21,7 @@ class _AccountListView extends State<AccountListView> {
 
   // first focus node is for "Account number" input field
   // second focus node is for "Account balance" input field
-  final Map<int, Pair<FocusNode, FocusNode>> _itemInputFocusNodes = {};
+  final Map<int, FocusNode> _itemInputFocusNodes = {};
 
   /// Scroll controller for content list
   /// use this to achieve scroll down to bottom
@@ -31,8 +31,7 @@ class _AccountListView extends State<AccountListView> {
   @override
   void dispose() {
     for (var element in _itemInputFocusNodes.entries) {
-      element.value.value1.dispose();
-      element.value.value2.dispose();
+      element.value.dispose();
     }
 
     super.dispose();
@@ -68,9 +67,8 @@ class _AccountListView extends State<AccountListView> {
                         }
 
                         final AccountDisplayModel model = viewModel.displayList[index];
-                        final FocusNode? accountNoFocusNode = _itemInputFocusNodes[model.account.id]?.value1;
-                        final FocusNode? accountBalanceFocusNode = _itemInputFocusNodes[model.account.id]?.value2;
-                        if (accountNoFocusNode == null || accountBalanceFocusNode == null) {
+                        final FocusNode? accountNoFocusNode = _itemInputFocusNodes[model.account.id];
+                        if (accountNoFocusNode == null) {
                           // if we cant get focus, then we just ignore it
                           return const SizedBox.shrink();
                         }
@@ -78,7 +76,6 @@ class _AccountListView extends State<AccountListView> {
                         return AccountCardView.create(
                             context,
                             accountNoFocusNode,
-                            accountBalanceFocusNode,
                             viewModel,
                             () => _onSelectAccountType(context, viewModel, model.account),
                             index
@@ -99,7 +96,7 @@ class _AccountListView extends State<AccountListView> {
   /// add new account card to view
   void _addNewAccountCard(AccountListViewModel viewModel, bool needUpdate) {
     final Account account = Account.create();
-    _itemInputFocusNodes[account.id] = Pair(FocusNode(), FocusNode());
+    _itemInputFocusNodes[account.id] = FocusNode();
     viewModel.update(account, needUpdate);
     _scrollDown2Bottom();
   }

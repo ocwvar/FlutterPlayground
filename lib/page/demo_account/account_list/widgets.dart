@@ -8,7 +8,6 @@ class AccountCardView {
   static Widget create(
       BuildContext context,
       FocusNode accountNoFocusNode,
-      FocusNode accountBalanceFocusNode,
       AccountListViewModel viewModel,
       Function() onSelectAccountType,
       int index)
@@ -69,23 +68,6 @@ class AccountCardView {
                 ),
               ),
             ),
-
-            // account balance input field
-            SizedBox(
-              width: double.infinity,
-              child: TextField(
-                decoration: getAccountBalanceInputDecorationOf(model.account.balance),
-                textInputAction: TextInputAction.done,
-                maxLength: 20,
-                keyboardType: TextInputType.number,
-                focusNode: accountBalanceFocusNode,
-                onChanged: (text) {
-                  model.account.balance.updateValueWithString(text);
-                  viewModel.update(model.account, true);
-                },
-                controller: getAccountBalanceControlOf(model.account, accountBalanceFocusNode),
-              ),
-            )
           ],
         ),
       ),
@@ -161,24 +143,6 @@ class AccountCardView {
     return const SizedBox.shrink();
   }
 
-  /// get [InputDecoration] by state of given [Balance]
-  /// there will have 3 state:
-  /// 1. balance below 0
-  /// 2. normal state without any error
-  static InputDecoration getAccountBalanceInputDecorationOf(Balance balance) {
-    if (balance.value < 0.0) {
-      return const InputDecoration(
-          errorText: "Your balance should always bigger then zero",
-          errorStyle: TextStyle(color: Colors.redAccent)
-      );
-    }
-
-    return const InputDecoration(
-        labelText: "Account balance",
-        enabledBorder: InputBorder.none
-    );
-  }
-
   /// get [TextEditingController] by current state of [FocusNode]
   /// we should *NOT* pass [TextEditingController] when [FocusNode.hasFocus] is True
   /// or cursor will have conflict setting text while value being update
@@ -189,18 +153,6 @@ class AccountCardView {
     return TextEditingController.fromValue(
         TextEditingValue(
             text: account.accountNo
-        )
-    );
-  }
-
-  /// same as [getAccountNoControlOf]
-  static TextEditingController? getAccountBalanceControlOf(Account account, FocusNode focusNode) {
-    if (focusNode.hasFocus) {
-      return null;
-    }
-    return TextEditingController.fromValue(
-        TextEditingValue(
-            text: account.balance.getDisplayString()
         )
     );
   }
