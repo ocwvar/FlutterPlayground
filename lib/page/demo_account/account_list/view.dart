@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_playground/base/pair.dart';
+import 'package:flutter_playground/page/demo_account/account_list/currency_select_dialog.dart';
 import 'package:flutter_playground/page/demo_account/account_list/view_model.dart';
 import 'package:flutter_playground/page/demo_account/account_list/widgets.dart';
 import 'package:flutter_playground/page/demo_account/account_type/view.dart';
 import 'package:flutter_playground/page/demo_account/models/account.dart';
 import 'package:flutter_playground/page/demo_account/models/account_types.dart';
+import 'package:flutter_playground/page/demo_account/models/currency.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widget/app_bar.dart';
@@ -78,6 +79,7 @@ class _AccountListView extends State<AccountListView> {
                             accountNoFocusNode,
                             viewModel,
                             () => _onSelectAccountType(context, viewModel, model.account),
+                            () => _onSelectCurrencyType(context, viewModel, model.account),
                             index
                         );
                       },
@@ -113,14 +115,43 @@ class _AccountListView extends State<AccountListView> {
   }
 
   /// call when user clicked "Account Type"
+  /// jump to page [AccountTypeView] to let use choose their account type
   /// @param [index] which item has been clicked
   void _onSelectAccountType(BuildContext context, AccountListViewModel viewModel, Account account) async {
     final AccountTypeDetail? result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AccountTypeView()));
     if (result == null) {
+      // when user click back button will return NULL result
       return;
     }
 
+    // update account model and request update to viewModel
     account.updateAccountType(result);
     viewModel.update(account, true);
   }
+
+  /// open a dialog to let user to select currency type
+  void _onSelectCurrencyType(BuildContext context, AccountListViewModel viewModel, Account account) {
+    showDialog(
+        context: context,
+        builder: (dialogContext) => Dialog(
+          child: CurrencySelectionDialogView(
+              "Select currency",
+              account.currency,
+              // callback when user clicked currency item
+              (Currency selectedCurrency) {
+                if (selectedCurrency == account.currency) {
+                  // ignored if clicked one is we already have
+                  return;
+                }
+
+                // update viewModel
+                account.updateCurrencyType(selectedCurrency);
+                viewModel.update(account, true);
+                Navigator.pop(dialogContext);
+              }
+          ),
+        )
+    );
+  }
+
 }

@@ -10,6 +10,7 @@ class AccountCardView {
       FocusNode accountNoFocusNode,
       AccountListViewModel viewModel,
       Function() onSelectAccountType,
+      Function() onSelectCurrencyType,
       int index)
   {
     final AccountDisplayModel model = viewModel.displayList[index];
@@ -26,7 +27,7 @@ class AccountCardView {
               children: [
                 Text("Account ${index + 1}", style: Theme.of(context).textTheme.headline4,),
                 const Spacer(),
-                deleteButtonVisibilityOf(viewModel, model)
+                _deleteButtonVisibilityOf(viewModel, model)
               ],
             ),
 
@@ -36,13 +37,32 @@ class AccountCardView {
               child: InkWell(
                 onTap: onSelectAccountType,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Account Type", style: Theme.of(context).textTheme.titleMedium),
                       const SizedBox(height: 6,),
-                      Text(getAccountTypeDesc(model.account), style: Theme.of(context).textTheme.caption)
+                      Text(_getAccountTypeDesc(model.account), style: Theme.of(context).textTheme.caption)
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            // account balance currency type
+            SizedBox(
+              width: double.infinity,
+              child: InkWell(
+                onTap: onSelectCurrencyType,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Balance currency type", style: Theme.of(context).textTheme.titleMedium),
+                      const SizedBox(height: 6,),
+                      Text(_getAccountCurrencyDesc(model.account), style: Theme.of(context).textTheme.caption)
                     ],
                   ),
                 ),
@@ -55,7 +75,7 @@ class AccountCardView {
               child: SizedBox(
                 width: double.infinity,
                 child: TextField(
-                    decoration: getAccountNoInputDecorationOf(model),
+                    decoration: _getAccountNoInputDecorationOf(model),
                     textInputAction: TextInputAction.next,
                     maxLength: 13,
                     focusNode: accountNoFocusNode,
@@ -64,7 +84,7 @@ class AccountCardView {
                       model.account.updateAccountNo(text);
                       viewModel.update(model.account, true);
                     },
-                    controller: getAccountNoControlOf(model.account, accountNoFocusNode)
+                    controller: _getAccountNoControlOf(model.account, accountNoFocusNode)
                 ),
               ),
             ),
@@ -74,7 +94,9 @@ class AccountCardView {
     );
   }
 
-  static String getAccountTypeDesc(Account account) {
+  /// get account type description by [Account.typeName] and [Account.description]
+  /// return [String] text of account type or hint
+  static String _getAccountTypeDesc(Account account) {
     final String name = account.type?.typeName ?? "";
     final String desc = account.type?.description ?? "";
 
@@ -85,13 +107,25 @@ class AccountCardView {
     }
   }
 
+  /// get account currency description by [Account.currency]
+  /// return [String] text of Currency name or hint
+  static String _getAccountCurrencyDesc(Account account) {
+    final String currencyName = account.currency?.name.toUpperCase() ?? "";
+
+    if (currencyName.isEmpty) {
+      return "Please select your balance currency";
+    } else {
+      return currencyName;
+    }
+  }
+
   /// get [InputDecoration] by state of given [AccountDisplayModel]
   /// there will have 3 state:
   /// 1. no account number
   /// 2. account number already existed
   /// 3. normal state without any error
   /// 4. account number format is invalid
-  static InputDecoration getAccountNoInputDecorationOf(AccountDisplayModel model) {
+  static InputDecoration _getAccountNoInputDecorationOf(AccountDisplayModel model) {
     // state of duplicated
     if (model.isDuplicated) {
       return const InputDecoration(
@@ -129,7 +163,7 @@ class AccountCardView {
 
   /// get delete button if source list in [AccountListViewModel] has more then 1 item
   /// @return [Widget]
-  static Widget deleteButtonVisibilityOf(AccountListViewModel viewModel, AccountDisplayModel model) {
+  static Widget _deleteButtonVisibilityOf(AccountListViewModel viewModel, AccountDisplayModel model) {
     if (viewModel.displayList.length > 1) {
       return InkWell(
         onTap: () => viewModel.remove(model.account.id),
@@ -146,7 +180,7 @@ class AccountCardView {
   /// get [TextEditingController] by current state of [FocusNode]
   /// we should *NOT* pass [TextEditingController] when [FocusNode.hasFocus] is True
   /// or cursor will have conflict setting text while value being update
-  static TextEditingController? getAccountNoControlOf(Account account, FocusNode focusNode) {
+  static TextEditingController? _getAccountNoControlOf(Account account, FocusNode focusNode) {
     if (focusNode.hasFocus) {
       return null;
     }
