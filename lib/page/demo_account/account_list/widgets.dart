@@ -35,7 +35,10 @@ class AccountCardView {
             SizedBox(
               width: double.infinity,
               child: InkWell(
-                onTap: onSelectAccountType,
+                onTap: () {
+                  accountNoFocusNode.unfocus();
+                  onSelectAccountType.call();
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: Column(
@@ -54,7 +57,10 @@ class AccountCardView {
             SizedBox(
               width: double.infinity,
               child: InkWell(
-                onTap: onSelectCurrencyType,
+                onTap: () {
+                  accountNoFocusNode.unfocus();
+                  onSelectCurrencyType.call();
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: Column(
@@ -76,8 +82,9 @@ class AccountCardView {
                 width: double.infinity,
                 child: TextField(
                     decoration: _getAccountNoInputDecorationOf(model),
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.done,
                     maxLength: 13,
+                    autofocus: false,
                     focusNode: accountNoFocusNode,
                     keyboardType: TextInputType.number,
                     onChanged: (text) {

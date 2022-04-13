@@ -29,15 +29,13 @@ Widget createListItem(BuildContext context, String title, bool enabled, Function
 
 Widget createRadioListItem<T>(BuildContext context, String title, SelectStateModel<T> stateModel, Function(T selectedItem)? block) {
   return InkWell(
-    onTap: () {
-      block?.call(stateModel.object);
-    },
+    onTap: () => block?.call(stateModel.object),
     child: Row(
       children: [
         Radio(
             value: 1,
             groupValue: stateModel.isSelected ? 1 : 0,
-            onChanged: (_) {}
+            onChanged: (_) => block?.call(stateModel.object)
         ),
         Text(title, style: Theme.of(context).textTheme.titleMedium,)
       ],
