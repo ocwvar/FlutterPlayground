@@ -8,6 +8,10 @@ class AccountListViewModel extends ChangeNotifier {
   final List<AccountDisplayModel> _displayList = List.empty(growable: true);
   List<AccountDisplayModel> get displayList => _displayList;
 
+  // invalid item existed flag
+  bool _hasInvalidItem = false;
+  bool get canSubmit => !_hasInvalidItem;
+
   void update(Account account, bool needRefresh) {
     /// try to get from source list first
     final Account item = _getAccountById(account.id) ?? account;
@@ -19,6 +23,10 @@ class AccountListViewModel extends ChangeNotifier {
     int index = -1;
     bool shouldReCheckDuplicateState = false;
     String accountNo = "";
+
+    // check if item of this [account.no] was duplicated
+    // we should check whole list again to see if there
+    // have other item duplicated with it
     for(int i = 0; i < _accounts.length; i++) {
       if(_accounts[i].id == id) {
         shouldReCheckDuplicateState = _displayList[i].isDuplicated;
@@ -30,23 +38,48 @@ class AccountListViewModel extends ChangeNotifier {
       }
     }
 
+    // if we not found this item with given id
     if (index == -1) return;
 
     // remove from all source list
     _accounts.removeAt(index);
     _displayList.removeAt(index);
 
+    // reset invalid flag
+    _hasInvalidItem = false;
+
     // if flag [shouldReCheckDuplicateState] is true means this item was duplicated
     // with other object, and we should check theme again
-    if (shouldReCheckDuplicateState) {
-      for (AccountDisplayModel item in _displayList) {
+    for (AccountDisplayModel item in _displayList) {
+      if (shouldReCheckDuplicateState) {
         if (item.isDuplicated && item.account.accountNo == accountNo) {
           item.isDuplicated = _isAccountNoDuplicated(accountNo);
         }
       }
+
+      // if we already in invalid status, then we no need to check
+      if (!_hasInvalidItem) {
+        _hasInvalidItem = !_isValidStatus(item);
+      }
     }
 
     _refreshView();
+  }
+
+  /// check given model to see if it's valid
+  /// isDuplicated == false
+  /// isInvalidFormat == false
+  /// has value: currency  type  accountNo
+  bool _isValidStatus(AccountDisplayModel model) {
+    if (model.isDuplicated || model.isInvalidFormat) {
+      return false;
+    }
+
+    if (model.account.currency == null || model.account.type == null || model.account.accountNo.isEmpty) {
+      return false;
+    }
+
+    return true;
   }
 
   /// check if given [accountNo] is already existed
@@ -90,6 +123,9 @@ class AccountListViewModel extends ChangeNotifier {
       _displayList[index] = displayModel;
     }
 
+    // reset invalid flag
+    _hasInvalidItem = false;
+
     // update item's state
     for (AccountDisplayModel item in _displayList) {
       // for duplicate checking we may update other model
@@ -101,6 +137,11 @@ class AccountListViewModel extends ChangeNotifier {
         item.isDuplicated
       ) {
         item.isDuplicated = _isAccountNoDuplicated(item.account.accountNo);
+      }
+
+      // if we already in invalid status, then we no need to check
+      if (!_hasInvalidItem) {
+        _hasInvalidItem = !_isValidStatus(item);
       }
     }
 

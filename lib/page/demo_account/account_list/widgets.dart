@@ -8,6 +8,7 @@ class AccountCardView {
   static Widget create(
       BuildContext context,
       FocusNode accountNoFocusNode,
+      FocusNode? currentActiveFocusNode,
       AccountListViewModel viewModel,
       Function() onSelectAccountType,
       Function() onSelectCurrencyType,
@@ -35,8 +36,9 @@ class AccountCardView {
             SizedBox(
               width: double.infinity,
               child: InkWell(
+                highlightColor: Colors.transparent,
                 onTap: () {
-                  accountNoFocusNode.unfocus();
+                  currentActiveFocusNode?.unfocus();
                   onSelectAccountType.call();
                 },
                 child: Padding(
@@ -57,8 +59,9 @@ class AccountCardView {
             SizedBox(
               width: double.infinity,
               child: InkWell(
+                highlightColor: Colors.transparent,
                 onTap: () {
-                  accountNoFocusNode.unfocus();
+                  currentActiveFocusNode?.unfocus();
                   onSelectCurrencyType.call();
                 },
                 child: Padding(
@@ -216,6 +219,60 @@ class AddAccountButtonView {
         ),
       ),
     );
+  }
+
+}
+
+class SubmitButton extends StatelessWidget {
+
+  final String _title;
+  final Function() _onClick;
+  final bool enable;
+
+  const SubmitButton(this._title, this.enable, this._onClick, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ColoredBox(
+        color: getStatusColor(context),
+        child: Stack(
+          alignment: AlignmentDirectional.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 15, bottom: 15),
+              child: Text(_title, style: const TextStyle(color: Colors.white, fontSize: 18)),
+            ),
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.white.withOpacity(0.3),
+                  onTap: (){
+                    if (enable) {
+                      _onClick.call();
+                    }
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Color getStatusColor(BuildContext context) {
+    final Color statusColor;
+    if (enable) {
+      statusColor = Theme.of(context).primaryColor;
+    } else {
+      statusColor = Colors.black12;
+    }
+
+    return statusColor;
   }
 
 }

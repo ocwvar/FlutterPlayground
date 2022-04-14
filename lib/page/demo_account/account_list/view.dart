@@ -18,7 +18,7 @@ class AccountListView extends StatefulWidget {
 
 class _AccountListView extends State<AccountListView> {
 
-  final int _maxAccountCardNumber = 6;
+  final int _maxAccountCardNumber = 5;
 
   // first focus node is for "Account number" input field
   // second focus node is for "Account balance" input field
@@ -64,7 +64,10 @@ class _AccountListView extends State<AccountListView> {
                         // for the last one, should be "add account" button
                         if (index == viewModel.displayList.length) {
                           final bool reachLimit = viewModel.displayList.length == _maxAccountCardNumber;
-                          return AddAccountButtonView.create(context, reachLimit, () => _addNewAccountCard(viewModel, true));
+                          return AddAccountButtonView.create(context, reachLimit, () {
+                            _getCurrentActiveFocus()?.unfocus();
+                            _addNewAccountCard(viewModel, true);
+                          });
                         }
 
                         final AccountDisplayModel model = viewModel.displayList[index];
@@ -77,6 +80,7 @@ class _AccountListView extends State<AccountListView> {
                         return AccountCardView.create(
                             context,
                             accountNoFocusNode,
+                            _getCurrentActiveFocus(),
                             viewModel,
                             () => _onSelectAccountType(context, viewModel, model.account),
                             () => _onSelectCurrencyType(context, viewModel, model.account),
@@ -86,6 +90,11 @@ class _AccountListView extends State<AccountListView> {
                       // the last one should be "add account" button
                       itemCount: viewModel.displayList.length + 1,
                     )
+                ),
+                SubmitButton(
+                    "Submit",
+                    viewModel.canSubmit,
+                    () => _submit()
                 )
               ],
             );
@@ -93,6 +102,21 @@ class _AccountListView extends State<AccountListView> {
         ),
       ),
     );
+  }
+
+  /// submit all account
+  void _submit() {
+
+  }
+
+  FocusNode? _getCurrentActiveFocus() {
+    for (FocusNode item in _itemInputFocusNodes.values) {
+      if (item.hasFocus || item.hasPrimaryFocus) {
+        return item;
+      }
+    }
+
+    return null;
   }
 
   /// add new account card to view
