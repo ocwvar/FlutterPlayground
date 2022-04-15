@@ -78,8 +78,7 @@ class _AccountListView extends State<AccountListView> {
                           return const SizedBox.shrink();
                         }
 
-                        return AccountCardView.create(
-                            context,
+                        return AccountCardView(
                             accountNoFocusNode,
                             _getCurrentActiveFocus(),
                             viewModel,

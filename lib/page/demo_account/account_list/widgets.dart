@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/demo_account/account_list/view_model.dart';
 import 'package:flutter_playground/page/demo_account/models/account.dart';
 
-class AccountCardView {
+class AccountCardView extends StatelessWidget {
 
-  /// create a [Widget] has account info
-  static Widget create(
-      BuildContext context,
-      FocusNode accountNoFocusNode,
-      FocusNode? currentActiveFocusNode,
-      AccountListViewModel viewModel,
-      Function() onSelectAccountType,
-      Function() onSelectCurrencyType,
-      int index)
-  {
-    final AccountDisplayModel model = viewModel.displayList[index];
+  final FocusNode _accountNoFocusNode;
+  final FocusNode? _currentActiveFocusNode;
+  final AccountListViewModel _viewModel;
+  final Function() _onSelectAccountType;
+  final Function() _onSelectCurrencyType;
+  final int _index;
+
+  const AccountCardView(this._accountNoFocusNode, this._currentActiveFocusNode, this._viewModel, this._onSelectAccountType, this._onSelectCurrencyType, this._index, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final AccountDisplayModel model = _viewModel.displayList[_index];
 
     return Card(
       elevation: 5,
@@ -26,9 +27,9 @@ class AccountCardView {
             // column 1 -- account number and delete button
             Row(
               children: [
-                Text("Account ${index + 1}", style: Theme.of(context).textTheme.headline4,),
+                Text("Account ${_index + 1}", style: Theme.of(context).textTheme.headline4,),
                 const Spacer(),
-                _deleteButtonVisibilityOf(viewModel, model)
+                _deleteButtonVisibilityOf(_viewModel, model)
               ],
             ),
 
@@ -38,8 +39,8 @@ class AccountCardView {
               child: InkWell(
                 highlightColor: Colors.transparent,
                 onTap: () {
-                  currentActiveFocusNode?.unfocus();
-                  onSelectAccountType.call();
+                  _currentActiveFocusNode?.unfocus();
+                  _onSelectAccountType.call();
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
@@ -61,8 +62,8 @@ class AccountCardView {
               child: InkWell(
                 highlightColor: Colors.transparent,
                 onTap: () {
-                  currentActiveFocusNode?.unfocus();
-                  onSelectCurrencyType.call();
+                  _currentActiveFocusNode?.unfocus();
+                  _onSelectCurrencyType.call();
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20),
@@ -88,13 +89,13 @@ class AccountCardView {
                     textInputAction: TextInputAction.done,
                     maxLength: 13,
                     autofocus: false,
-                    focusNode: accountNoFocusNode,
+                    focusNode: _accountNoFocusNode,
                     keyboardType: TextInputType.number,
                     onChanged: (text) {
                       model.account.updateAccountNo(text);
-                      viewModel.update(model.account, true);
+                      _viewModel.update(model.account, true);
                     },
-                    controller: _getAccountNoControlOf(model.account, accountNoFocusNode)
+                    controller: _getAccountNoControlOf(model.account, _accountNoFocusNode)
                 ),
               ),
             ),
@@ -106,7 +107,7 @@ class AccountCardView {
 
   /// get account type description by [Account.typeName] and [Account.description]
   /// return [String] text of account type or hint
-  static String _getAccountTypeDesc(Account account) {
+  String _getAccountTypeDesc(Account account) {
     final String name = account.type?.typeName ?? "";
     final String desc = account.type?.description ?? "";
 
@@ -119,7 +120,7 @@ class AccountCardView {
 
   /// get account currency description by [Account.currency]
   /// return [String] text of Currency name or hint
-  static String _getAccountCurrencyDesc(Account account) {
+  String _getAccountCurrencyDesc(Account account) {
     final String currencyName = account.currency?.name.toUpperCase() ?? "";
 
     if (currencyName.isEmpty) {
@@ -135,7 +136,7 @@ class AccountCardView {
   /// 2. account number already existed
   /// 3. normal state without any error
   /// 4. account number format is invalid
-  static InputDecoration _getAccountNoInputDecorationOf(AccountDisplayModel model) {
+  InputDecoration _getAccountNoInputDecorationOf(AccountDisplayModel model) {
     // state of duplicated
     if (model.isDuplicated) {
       return const InputDecoration(
@@ -173,7 +174,7 @@ class AccountCardView {
 
   /// get delete button if source list in [AccountListViewModel] has more then 1 item
   /// @return [Widget]
-  static Widget _deleteButtonVisibilityOf(AccountListViewModel viewModel, AccountDisplayModel model) {
+  Widget _deleteButtonVisibilityOf(AccountListViewModel viewModel, AccountDisplayModel model) {
     if (viewModel.displayList.length > 1) {
       return InkWell(
         onTap: () => viewModel.remove(model.account.id),
@@ -190,7 +191,7 @@ class AccountCardView {
   /// get [TextEditingController] by current state of [FocusNode]
   /// we should *NOT* pass [TextEditingController] when [FocusNode.hasFocus] is True
   /// or cursor will have conflict setting text while value being update
-  static TextEditingController? _getAccountNoControlOf(Account account, FocusNode focusNode) {
+  TextEditingController? _getAccountNoControlOf(Account account, FocusNode focusNode) {
     if (focusNode.hasFocus) {
       return null;
     }
@@ -200,7 +201,6 @@ class AccountCardView {
         )
     );
   }
-
 }
 
 class AddAccountButtonView extends StatelessWidget {
