@@ -6,6 +6,7 @@ import 'package:flutter_playground/page/demo_account/account_type/view.dart';
 import 'package:flutter_playground/page/demo_account/models/account.dart';
 import 'package:flutter_playground/page/demo_account/models/account_types.dart';
 import 'package:flutter_playground/page/demo_account/models/currency.dart';
+import 'package:flutter_playground/page/demo_account/verify/view.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widget/app_bar.dart';
@@ -64,7 +65,7 @@ class _AccountListView extends State<AccountListView> {
                         // for the last one, should be "add account" button
                         if (index == viewModel.displayList.length) {
                           final bool reachLimit = viewModel.displayList.length == _maxAccountCardNumber;
-                          return AddAccountButtonView.create(context, reachLimit, () {
+                          return AddAccountButtonView(reachLimit, () {
                             _getCurrentActiveFocus()?.unfocus();
                             _addNewAccountCard(viewModel, true);
                           });
@@ -94,7 +95,7 @@ class _AccountListView extends State<AccountListView> {
                 SubmitButton(
                     "Submit",
                     viewModel.canSubmit,
-                    () => _submit()
+                    () => _submit(viewModel)
                 )
               ],
             );
@@ -105,8 +106,11 @@ class _AccountListView extends State<AccountListView> {
   }
 
   /// submit all account
-  void _submit() {
-
+  void _submit(AccountListViewModel viewModel) {
+    _getCurrentActiveFocus()?.unfocus();
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => VerifyPageView((viewModel.readOnlyAccountList)))
+    );
   }
 
   FocusNode? _getCurrentActiveFocus() {

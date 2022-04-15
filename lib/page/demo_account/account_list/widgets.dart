@@ -203,19 +203,40 @@ class AccountCardView {
 
 }
 
-class AddAccountButtonView {
+class AddAccountButtonView extends StatelessWidget {
 
-  static Widget create(BuildContext context, bool reachLimit, Function() onClick){
+  final bool _reachLimit;
+  final Function() _onClick;
+
+  const AddAccountButtonView(this._reachLimit, this._onClick, {Key? key}) : super(key: key);
+
+  double getOpacityValuesByState() {
+    if (_reachLimit) {
+      return 0.3;
+    }
+
+    return 1;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => onClick(),
+      onTap: () {
+        if (!_reachLimit) {
+          _onClick.call();
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Row(
-          children: const [
-            Icon(Icons.add_circle_outline),
-            SizedBox(width: 20,),
-            Text("Add account")
-          ],
+        child: Opacity(
+          opacity: getOpacityValuesByState(),
+          child: Row(
+            children: const [
+              Icon(Icons.add_circle_outline),
+              SizedBox(width: 20,),
+              Text("Add account")
+            ],
+          ),
         ),
       ),
     );

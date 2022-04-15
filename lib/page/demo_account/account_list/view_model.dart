@@ -4,6 +4,7 @@ import 'package:flutter_playground/page/demo_account/models/account.dart';
 class AccountListViewModel extends ChangeNotifier {
   final RegExp _regExRule = RegExp("^[\\d]{6}-[\\d]{6}\$");
   final List<Account> _accounts = List.empty(growable: true);
+  List<Account> get readOnlyAccountList => _accounts;
 
   final List<AccountDisplayModel> _displayList = List.empty(growable: true);
   List<AccountDisplayModel> get displayList => _displayList;
