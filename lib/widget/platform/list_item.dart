@@ -37,13 +37,20 @@ class PlatformListItem extends BasePlatformWidget<Widget, Widget> {
 
   @override
   Widget createIOSObject(BuildContext arg) {
-    return SizedBox(
-      width: double.infinity,
-      child: CupertinoButton(
-          child: Text(title),
-          onPressed: onPressed,
-          alignment: AlignmentDirectional.centerStart,
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(height: 1,thickness: 1,),
+        SizedBox(
+          width: double.infinity,
+          child: CupertinoButton(
+            child: Text(title, style: CupertinoTheme.of(arg).textTheme.textStyle,),
+            onPressed: onPressed,
+            padding: const EdgeInsets.all(12),
+            alignment: AlignmentDirectional.centerStart,
+          ),
+        )
+      ],
     );
   }
 

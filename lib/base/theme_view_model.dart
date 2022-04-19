@@ -2,6 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_playground/base/platform_control.dart';
 
 class ThemeViewModel extends ChangeNotifier {
 
@@ -15,24 +17,20 @@ class ThemeViewModel extends ChangeNotifier {
 
   ThemeViewModel(this._defaultThemeColor);
 
+  /// set platform version to app change style
+  void setPlatformVersion(PlatformVersion platformVersion) {
+    PlatformControl.self.setPlatformVersion(platformVersion);
+    notifyListeners();
+  }
+
   /// change day-night type
   void changeType(DayNightType type) {
     _currentType = type;
     notifyListeners();
   }
 
-  /// @return [ThemeMode] current theme mode
-  ThemeMode currentMode() {
-    switch(_currentType) {
-      case DayNightType.light:
-        return ThemeMode.light;
-
-      case DayNightType.night:
-        return ThemeMode.dark;
-
-      case DayNightType.followSystem:
-        return ThemeMode.system;
-    }
+  Brightness _currentSystemBrightness() {
+    return SchedulerBinding.instance!.window.platformBrightness;
   }
 
   /// change current theme color and notice app theme change
@@ -49,7 +47,21 @@ class ThemeViewModel extends ChangeNotifier {
   /// get current [CupertinoThemeData] with custom color
   /// @param [bool] whether is Dark theme
   /// @return [CupertinoThemeData] for iOS platform
-  CupertinoThemeData getCupertinoThemeData(bool isDark) {
+  CupertinoThemeData getCupertinoThemeData() {
+
+    final bool isDark;
+    switch(currentType) {
+      case DayNightType.light:
+        isDark = false;
+        break;
+      case DayNightType.night:
+        isDark = true;
+        break;
+      case DayNightType.followSystem:
+        isDark = _currentSystemBrightness() == Brightness.dark;
+        break;
+    }
+
     return CupertinoThemeData(
       brightness: isDark? Brightness.dark : Brightness.light,
       primaryColor: _currentIThemeColor,

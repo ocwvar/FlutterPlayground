@@ -11,6 +11,7 @@ class PlatformButton extends BasePlatformWidget<ElevatedButton, CupertinoButton>
   final Color? iosButtonColor;
   final EdgeInsets? iosButtonPadding;
 
+  final bool isDisable;
   final EdgeInsets _defaultIosButtonPadding = const EdgeInsets.all(12);
 
   const PlatformButton({
@@ -20,12 +21,13 @@ class PlatformButton extends BasePlatformWidget<ElevatedButton, CupertinoButton>
     this.androidButtonStyle,
     this.iosButtonColor,
     this.iosButtonPadding,
+    this.isDisable = false,
   }) : super(key: key);
 
   @override
   ElevatedButton createAndroidObject(BuildContext arg) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: isDisable ? null : onPressed,
       child: child,
       style: androidButtonStyle,
     );
@@ -35,7 +37,7 @@ class PlatformButton extends BasePlatformWidget<ElevatedButton, CupertinoButton>
   CupertinoButton createIOSObject(BuildContext arg) {
     if (iosButtonColor == null) {
       return CupertinoButton.filled(
-          onPressed: onPressed,
+          onPressed: isDisable ? null : onPressed,
           child: child,
           padding: iosButtonPadding ?? _defaultIosButtonPadding
       );
@@ -43,7 +45,7 @@ class PlatformButton extends BasePlatformWidget<ElevatedButton, CupertinoButton>
 
     return CupertinoButton(
         color: iosButtonColor,
-        onPressed: onPressed,
+        onPressed: isDisable ? null : onPressed,
         child: child,
         padding: iosButtonPadding ?? _defaultIosButtonPadding
     );

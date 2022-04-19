@@ -25,7 +25,7 @@ class PlaygroundApp extends StatelessWidget {
             return PlatformApp(
                 androidLightTheme: viewModel.getMaterialThemeData(false),
                 androidDarkTheme: viewModel.getMaterialThemeData(true),
-                iOSTheme: viewModel.getCupertinoThemeData(false),
+                iOSTheme: viewModel.getCupertinoThemeData(),
                 dayNightType: viewModel.currentType,
                 localizationsDelegates: const [
                   S.delegate,

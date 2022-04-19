@@ -6,9 +6,15 @@ import 'package:flutter_playground/widget/platform/base.dart';
 class PlatformScaffold extends BasePlatformWidget<Scaffold, CupertinoPageScaffold>{
 
   final PlatformAppBar platformAppBar;
+  final bool isiOSLargeStyle;
   final Widget body;
 
-  const PlatformScaffold({Key? key, required this.platformAppBar, required this.body}) : super(key: key);
+  const PlatformScaffold({
+    Key? key,
+    required this.platformAppBar,
+    required this.body,
+    this.isiOSLargeStyle = false
+  }) : super(key: key);
 
   @override
   Scaffold createAndroidObject(BuildContext arg) {
@@ -20,6 +26,21 @@ class PlatformScaffold extends BasePlatformWidget<Scaffold, CupertinoPageScaffol
 
   @override
   CupertinoPageScaffold createIOSObject(BuildContext arg) {
+    if (isiOSLargeStyle) {
+      return CupertinoPageScaffold(
+        child: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled){
+            return <Widget>[
+              CupertinoSliverNavigationBar(
+                largeTitle: Text(platformAppBar.title),
+              )
+            ];
+          },
+          body: body,
+        ),
+      );
+    }
+
     return CupertinoPageScaffold(
       navigationBar: platformAppBar.createIOSObject(arg),
       child: SafeArea(

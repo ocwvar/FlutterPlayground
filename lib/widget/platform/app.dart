@@ -28,6 +28,20 @@ class PlatformApp extends BasePlatformWidget<MaterialApp, CupertinoApp> {
     required this.home
   }) : super(key: key);
 
+  /// @return [ThemeMode] current theme mode
+  ThemeMode _androidCurrentMode() {
+    switch(dayNightType) {
+      case DayNightType.light:
+        return ThemeMode.light;
+
+      case DayNightType.night:
+        return ThemeMode.dark;
+
+      case DayNightType.followSystem:
+        return ThemeMode.system;
+    }
+  }
+
   @override
   MaterialApp createAndroidObject(BuildContext arg) {
     return MaterialApp(
@@ -36,6 +50,7 @@ class PlatformApp extends BasePlatformWidget<MaterialApp, CupertinoApp> {
       supportedLocales: supportedLocales,
       theme: androidLightTheme,
       darkTheme: androidDarkTheme,
+      themeMode: _androidCurrentMode(),
       home: home,
     );
   }
@@ -47,7 +62,7 @@ class PlatformApp extends BasePlatformWidget<MaterialApp, CupertinoApp> {
       localizationsDelegates: localizationsDelegates,
       supportedLocales: supportedLocales,
       theme: iOSTheme,
-      home: home,
+      home: home
     );
   }
 

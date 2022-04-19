@@ -1,16 +1,23 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/widget/platform/base.dart';
+
+import '../../base/platform_control.dart';
 
 class PlatformAppBar implements IPlatformObjectSelector<AppBar, CupertinoNavigationBar, PreferredSizeWidget, BuildContext> {
 
   final String title;
   final bool hasBackAction;
   final BuildContext context;
+  final String iosPreviousTitle;
 
-  const PlatformAppBar({Key? key, required this.context, required this.title, this.hasBackAction = true});
+  const PlatformAppBar({
+    Key? key,
+    required this.context,
+    required this.title,
+    this.iosPreviousTitle = "Back",
+    this.hasBackAction = true
+  });
 
   PreferredSizeWidget getAppBar() {
     return getPlatformObject(context);
@@ -18,9 +25,9 @@ class PlatformAppBar implements IPlatformObjectSelector<AppBar, CupertinoNavigat
 
   @override
   PreferredSizeWidget getPlatformObject(BuildContext context) {
-    // if (Platform.isAndroid) {
-    //   return createAndroidObject(context);
-    // }
+    if (PlatformControl.self.isRunningAndroid()) {
+      return createAndroidObject(context);
+    }
 
     return createIOSObject(context);
   }
@@ -40,15 +47,21 @@ class PlatformAppBar implements IPlatformObjectSelector<AppBar, CupertinoNavigat
 
   @override
   CupertinoNavigationBar createIOSObject(BuildContext context) {
-    return CupertinoNavigationBar(
-      middle: Text(title),
-      leading: hasBackAction ? CupertinoButton(
-        padding: EdgeInsets.zero,
-        child: const Icon(CupertinoIcons.chevron_back),
+    final Widget? backButton;
+    if (hasBackAction) {
+      backButton = CupertinoNavigationBarBackButton(
+        previousPageTitle: iosPreviousTitle,
         onPressed: () {
           if (Navigator.canPop(context)) Navigator.pop(context);
-        },
-      ) : null,
+        }
+      );
+    } else {
+      backButton = null;
+    }
+
+    return CupertinoNavigationBar(
+      middle: Text(title),
+      leading: backButton,
     );
   }
 

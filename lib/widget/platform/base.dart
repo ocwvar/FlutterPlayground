@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_playground/base/platform_control.dart';
 
 abstract class IPlatformObjectSelector<ANDROID, IOS, TYPE, ARG> {
 
@@ -33,11 +34,27 @@ abstract class BasePlatformWidget<ANDROID extends Widget, IOS extends Widget>
   /// get a [Widget] that has matched style to current platform
   @override
   Widget getPlatformObject(BuildContext context) {
-    // if (isRunningAndroid) {
-    //   return createAndroidObject(context);
-    // }
+     if (PlatformControl.self.isRunningAndroid()) {
+       return createAndroidObject(context);
+     }
 
     return createIOSObject(context);
   }
 
+}
+
+T? getNullablePlatformObject<T>({required T? forAndroid, required T? forIOS}) {
+  if (PlatformControl.self.isRunningAndroid()) {
+    return forAndroid;
+  }
+
+  return forIOS;
+}
+
+T getNotNullablePlatformObject<T>({required T forAndroid, required T forIOS}) {
+  if (PlatformControl.self.isRunningAndroid()) {
+    return forAndroid;
+  }
+
+  return forIOS;
 }

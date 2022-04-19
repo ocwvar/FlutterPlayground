@@ -10,7 +10,7 @@ class TextStylesView extends StatelessWidget {
     return Scaffold(
       appBar: PlatformAppBar(
           context: context,
-          title: "Text styles"
+          title: "Text styles",
       ).getAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
