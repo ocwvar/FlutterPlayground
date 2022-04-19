@@ -2,41 +2,42 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 
-abstract class IPlatformWidgetSelector<ANDROID extends Widget, IOS extends Widget, TYPE extends Widget> {
+abstract class IPlatformObjectSelector<ANDROID, IOS, TYPE, ARG> {
 
-  /// get a [Widget] that has matched style to current platform
-  TYPE getPlatformWidget(BuildContext context);
+  /// get a [Object] that has matched style to current platform
+  TYPE getPlatformObject(ARG arg);
 
-  /// create a [Widget] for Android platform
-  /// return Android platform [Widget]
-  ANDROID createAndroidWidget(BuildContext context);
+  /// create a [Object] for Android platform
+  /// return Android platform [Object]
+  ANDROID createAndroidObject(ARG arg);
 
-  /// create a [Widget] for iOS platform
-  /// return iOS platform [Widget]
-  IOS createIOSWidget(BuildContext context);
+  /// create a [Object] for iOS platform
+  /// return iOS platform [Object]
+  IOS createIOSObject(ARG arg);
 
 }
 
 abstract class BasePlatformWidget<ANDROID extends Widget, IOS extends Widget>
     extends StatelessWidget
-    implements IPlatformWidgetSelector<ANDROID, IOS, Widget>
+    implements IPlatformObjectSelector<ANDROID, IOS, Widget, BuildContext>
 {
 
+  bool get isRunningAndroid => Platform.isAndroid;
   const BasePlatformWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return getPlatformWidget(context);
+    return getPlatformObject(context);
   }
 
   /// get a [Widget] that has matched style to current platform
   @override
-  Widget getPlatformWidget(BuildContext context) {
-    if (Platform.isAndroid) {
-      return createAndroidWidget(context);
-    }
+  Widget getPlatformObject(BuildContext context) {
+    // if (isRunningAndroid) {
+    //   return createAndroidObject(context);
+    // }
 
-    return createIOSWidget(context);
+    return createIOSObject(context);
   }
 
 }
