@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_playground/base/cross_platform.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
 
 import '../../widget/platform/app_bar.dart';
 
