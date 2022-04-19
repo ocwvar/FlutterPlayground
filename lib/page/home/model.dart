@@ -9,6 +9,7 @@ class HomeModel {
     PageModel("Platform specific code calling", PageType.platformSpecific),
     PageModel("Accessibility", PageType.accessibility),
     PageModel("Page state keeping", PageType.keepState),
+    PageModel("Blur", PageType.blur),
     PageModel("Account list demo", PageType.accountList),
   ];
 }
@@ -29,6 +30,7 @@ enum PageType {
   platformSpecific,
   accessibility,
   keepState,
+  blur,
   accountList
 }
 

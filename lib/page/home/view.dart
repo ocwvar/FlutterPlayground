@@ -9,6 +9,7 @@ import 'package:flutter_playground/page/remote_image/view.dart';
 import 'package:flutter_playground/page/system_info/view.dart';
 import 'package:flutter_playground/widget/list_item.dart';
 
+import '../blur/view.dart';
 import '../keep_state/view.dart';
 import '../text_styles/view.dart';
 import 'model.dart';
@@ -170,6 +171,9 @@ class _HomeView extends State<HomeView> {
 
         case PageType.keepState:
           return const KeepStateView();
+
+        case PageType.blur:
+          return const BlurDemoView();
 
         case PageType.accountList:
           return const AccountListView();
