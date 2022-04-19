@@ -94,7 +94,7 @@ class ThemeViewModel extends ChangeNotifier {
   /// convert given [Color] into [CupertinoDynamicColor]
   CupertinoDynamicColor _convertColor2CupertinoColor(Color color) {
     final Color light = _changeBrightness(color, 0.0);
-    final Color dark = _changeBrightness(color, -0.1);
+    final Color dark = _changeBrightness(color, 0.05);
     return CupertinoDynamicColor(
         color: light,
         darkColor: dark,
