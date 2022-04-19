@@ -10,4 +10,8 @@ Flutter demo
 - Dynamic list content
 - L10n support
 - CrossPlatform function calling
-- Accessibility
+- Accessibility showcases
+- Blur effect
+
+Complex demo:
+- Account management
