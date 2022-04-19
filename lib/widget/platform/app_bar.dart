@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/widget/platform/base.dart';
 
-class PlatformAppBar implements IPlatformWidgetSelector<AppBar, CupertinoNavigationBar, PreferredSizeWidget> {
+class PlatformAppBar implements IPlatformObjectSelector<AppBar, CupertinoNavigationBar, PreferredSizeWidget, BuildContext> {
 
   final String title;
   final bool hasBackAction;
@@ -11,16 +13,20 @@ class PlatformAppBar implements IPlatformWidgetSelector<AppBar, CupertinoNavigat
   const PlatformAppBar({Key? key, required this.context, required this.title, this.hasBackAction = true});
 
   PreferredSizeWidget getAppBar() {
-    return getPlatformWidget(context);
+    return getPlatformObject(context);
   }
 
   @override
-  PreferredSizeWidget getPlatformWidget(BuildContext context) {
-    return createIOSWidget(context);
+  PreferredSizeWidget getPlatformObject(BuildContext context) {
+    // if (Platform.isAndroid) {
+    //   return createAndroidObject(context);
+    // }
+
+    return createIOSObject(context);
   }
 
   @override
-  AppBar createAndroidWidget(BuildContext context) {
+  AppBar createAndroidObject(BuildContext context) {
     return AppBar(
       title: Text(title),
       leading: hasBackAction ? IconButton(
@@ -33,7 +39,7 @@ class PlatformAppBar implements IPlatformWidgetSelector<AppBar, CupertinoNavigat
   }
 
   @override
-  CupertinoNavigationBar createIOSWidget(BuildContext context) {
+  CupertinoNavigationBar createIOSObject(BuildContext context) {
     return CupertinoNavigationBar(
       middle: Text(title),
       leading: hasBackAction ? CupertinoButton(
