@@ -7,7 +7,6 @@ import 'package:flutter_playground/page/language/view.dart';
 import 'package:flutter_playground/page/platform/view.dart';
 import 'package:flutter_playground/page/remote_image/view.dart';
 import 'package:flutter_playground/page/system_info/view.dart';
-import 'package:flutter_playground/widget/list_item.dart';
 import 'package:flutter_playground/widget/platform/app_bar.dart';
 import 'package:flutter_playground/widget/platform/button.dart';
 import 'package:flutter_playground/widget/platform/list_item.dart';
