@@ -35,10 +35,7 @@ class PlaygroundApp extends StatelessWidget {
               theme: viewModel.getThemeData(false),
               darkTheme: viewModel.getThemeData(true),
               themeMode: viewModel.currentMode(),
-              home: Scaffold(
-                appBar: createAppBar(context, "Playground", false),
-                body: HomeView(viewModel),
-              ),
+              home: HomeView(viewModel),
             );
           },
         ),

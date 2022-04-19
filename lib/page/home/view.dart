@@ -9,6 +9,7 @@ import 'package:flutter_playground/page/remote_image/view.dart';
 import 'package:flutter_playground/page/system_info/view.dart';
 import 'package:flutter_playground/widget/list_item.dart';
 
+import '../../widget/app_bar.dart';
 import '../blur/view.dart';
 import '../keep_state/view.dart';
 import '../text_styles/view.dart';
@@ -30,35 +31,38 @@ class _HomeView extends State<HomeView> {
   Widget build(BuildContext context) {
     final HomeModel model = HomeModel();
 
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// day-night panel
-          Padding(
-            padding: const EdgeInsets.only(left: 8, top: 8),
-            child: Text("DayNight control", style: Theme.of(context).textTheme.titleLarge)
-          ),
-          createDayNightButtonPanel(context),
+    return Scaffold(
+      appBar: createAppBar(context, "Playground", false),
+      body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// day-night panel
+            Padding(
+                padding: const EdgeInsets.only(left: 8, top: 8),
+                child: Text("DayNight control", style: Theme.of(context).textTheme.titleLarge)
+            ),
+            createDayNightButtonPanel(context),
 
-          /// theme color panel
-          Padding(
-              padding: const EdgeInsets.only(left: 8, top: 8),
-              child: Text("Theme color control", style: Theme.of(context).textTheme.titleLarge)
-          ),
-          createThemeColorPanel(context),
+            /// theme color panel
+            Padding(
+                padding: const EdgeInsets.only(left: 8, top: 8),
+                child: Text("Theme color control", style: Theme.of(context).textTheme.titleLarge)
+            ),
+            createThemeColorPanel(context),
 
-          /// functions list
-          Padding(
-              padding: const EdgeInsets.only(left: 8, bottom: 8),
-              child: Text("Functions list", style: Theme.of(context).textTheme.titleLarge)
-          ),
-          Expanded(
-              child: ListView.builder(
-                  itemBuilder: (context, index) => createPageListView(context, model, index),
-                  itemCount: model.pages.length
-              )
-          )
-        ]
+            /// functions list
+            Padding(
+                padding: const EdgeInsets.only(left: 8, bottom: 8),
+                child: Text("Functions list", style: Theme.of(context).textTheme.titleLarge)
+            ),
+            Expanded(
+                child: ListView.builder(
+                    itemBuilder: (context, index) => createPageListView(context, model, index),
+                    itemCount: model.pages.length
+                )
+            )
+          ]
+      ),
     );
   }
 
