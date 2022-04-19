@@ -9,6 +9,9 @@ import 'package:flutter_playground/page/remote_image/view.dart';
 import 'package:flutter_playground/page/system_info/view.dart';
 import 'package:flutter_playground/widget/list_item.dart';
 import 'package:flutter_playground/widget/platform/app_bar.dart';
+import 'package:flutter_playground/widget/platform/button.dart';
+import 'package:flutter_playground/widget/platform/list_item.dart';
+import 'package:flutter_playground/widget/platform/scaffold.dart';
 
 import '../blur/view.dart';
 import '../keep_state/view.dart';
@@ -31,12 +34,12 @@ class _HomeView extends State<HomeView> {
   Widget build(BuildContext context) {
     final HomeModel model = HomeModel();
 
-    return Scaffold(
-      appBar: PlatformAppBar(
+    return PlatformScaffold(
+      platformAppBar: PlatformAppBar(
           context: context,
           title: "Home",
           hasBackAction: false
-      ).getAppBar(),
+      ),
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -80,12 +83,14 @@ class _HomeView extends State<HomeView> {
   /// @return [Widget]
   Widget createThemeColorPanel(BuildContext context) {
     Widget wrapCard(Color targetColor) {
-      return ElevatedButton(
+      return PlatformButton(
           onPressed: () => widget._viewModel.changeThemeColor(targetColor, true),
-          style: ButtonStyle(
+          androidButtonStyle: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(targetColor),
               fixedSize: MaterialStateProperty.all(const Size(50.0, 50.0))
           ),
+          iosButtonColor: targetColor,
+          iosButtonPadding: EdgeInsets.zero,
           child: const SizedBox(width: 50, height: 50)
       );
     }
@@ -118,11 +123,7 @@ class _HomeView extends State<HomeView> {
     /// get function that will be toggle when button click
     /// @param [DayNightType]
     /// @return [Function?] null if given [DayNightType] is currently using
-    Function()? getClickFunction(DayNightType targetType) {
-      if (widget._viewModel.currentType() == targetType) {
-        return null;
-      }
-
+    Function() getClickFunction(DayNightType targetType) {
       return () { onClickDayNightButton(targetType); };
     }
 
@@ -131,15 +132,15 @@ class _HomeView extends State<HomeView> {
       child: Row(
         children: [
           const Spacer(),
-          ElevatedButton(
+          PlatformButton(
               onPressed: getClickFunction(DayNightType.light) ,
               child: const Text("Light")),
           const Spacer(),
-          ElevatedButton(
+          PlatformButton(
               onPressed: getClickFunction(DayNightType.night) ,
               child: const Text("Night")),
           const Spacer(),
-          ElevatedButton(
+          PlatformButton(
               onPressed: getClickFunction(DayNightType.followSystem) ,
               child: const Text("Auto")),
           const Spacer(),
@@ -195,11 +196,11 @@ class _HomeView extends State<HomeView> {
     final Widget? page = findPageByType(pageModel.pageType);
 
     // if cant find matching page, will not pass click event to list item
-    final Function()? onClick = page == null ? null : () =>
+    final Function() onClick = page == null ? (){} : () =>
     {
       Navigator.push(context, MaterialPageRoute(builder: (context) => page))
     };
 
-    return createListItem(context, pageModel.title, true, onClick);
+    return PlatformListItem(title: pageModel.title, onPressed: onClick);
   }
 }
