@@ -7,7 +7,6 @@ Widget createListItem(BuildContext context, String title, bool enabled, Function
       onTap: () => block?.call(),
       child: Column(
         children: [
-          const Divider(height: 1,thickness: 1,),
           Padding(
               padding: const EdgeInsets.all(12),
               child: SizedBox(
@@ -21,7 +20,8 @@ Widget createListItem(BuildContext context, String title, bool enabled, Function
                   ),
                 ),
               )
-          )
+          ),
+          const Divider(height: 1,thickness: 1,),
         ],
       ),
     );

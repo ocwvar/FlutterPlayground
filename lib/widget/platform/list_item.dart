@@ -19,7 +19,6 @@ class PlatformListItem extends BasePlatformWidget<Widget, Widget> {
       onTap: onPressed,
       child: Column(
         children: [
-          const Divider(height: 1,thickness: 1,),
           Padding(
               padding: const EdgeInsets.all(12),
               child: SizedBox(
@@ -29,7 +28,8 @@ class PlatformListItem extends BasePlatformWidget<Widget, Widget> {
                   style: TextStyle(color: Theme.of(arg).textTheme.titleMedium?.color),
                 ),
               )
-          )
+          ),
+          const Divider(height: 1,thickness: 1,),
         ],
       ),
     );
@@ -40,7 +40,6 @@ class PlatformListItem extends BasePlatformWidget<Widget, Widget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Divider(height: 1,thickness: 1,),
         SizedBox(
           width: double.infinity,
           child: CupertinoButton(
@@ -49,7 +48,8 @@ class PlatformListItem extends BasePlatformWidget<Widget, Widget> {
             padding: const EdgeInsets.all(12),
             alignment: AlignmentDirectional.centerStart,
           ),
-        )
+        ),
+        const Divider(height: 1,thickness: 1,),
       ],
     );
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_playground/base/theme_view_model.dart';
 import 'package:flutter_playground/generated/l10n.dart';
-import 'package:flutter_playground/page/home/view.dart';
+import 'package:flutter_playground/page/setting/view.dart';
 import 'package:flutter_playground/widget/platform/app.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +34,7 @@ class PlaygroundApp extends StatelessWidget {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 supportedLocales: S.delegate.supportedLocales,
-                home: HomeView(viewModel)
+                home: SettingView(themeViewModel: viewModel)
             ).getPlatformObject(context);
           },
         ),

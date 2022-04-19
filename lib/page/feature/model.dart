@@ -1,4 +1,4 @@
-class HomeModel {
+class FeatureModel {
   /// page type list
   final List<PageModel> pages = [
     PageModel("Text styles", PageType.textStyles),
