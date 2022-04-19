@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ThemeViewModel extends ChangeNotifier {
@@ -7,7 +8,10 @@ class ThemeViewModel extends ChangeNotifier {
   final Color _defaultThemeColor;
 
   DayNightType _currentType = DayNightType.followSystem;
-  late MaterialColor _currentThemeColor = _convertColor2MaterialColor(_defaultThemeColor);
+  DayNightType get currentType => _currentType;
+
+  late MaterialColor _currentAThemeColor = _convertColor2MaterialColor(_defaultThemeColor);
+  late CupertinoDynamicColor _currentIThemeColor = _convertColor2CupertinoColor(_defaultThemeColor);
 
   ThemeViewModel(this._defaultThemeColor);
 
@@ -15,11 +19,6 @@ class ThemeViewModel extends ChangeNotifier {
   void changeType(DayNightType type) {
     _currentType = type;
     notifyListeners();
-  }
-
-  /// @return [DayNightType] current day-night type
-  DayNightType currentType() {
-    return _currentType;
   }
 
   /// @return [ThemeMode] current theme mode
@@ -40,20 +39,59 @@ class ThemeViewModel extends ChangeNotifier {
   /// @param [Color] color : color you want to change to
   /// @param [bool] needNotifyListeners: need to update to listener
   void changeThemeColor(Color color, bool needNotifyListeners) {
-    _currentThemeColor = _convertColor2MaterialColor(color);
+    _currentAThemeColor = _convertColor2MaterialColor(color);
+    _currentIThemeColor = _convertColor2CupertinoColor(color);
     if (needNotifyListeners) {
       notifyListeners();
     }
   }
 
-  /// get current theme with custom color
+  /// get current [CupertinoThemeData] with custom color
   /// @param [bool] whether is Dark theme
-  /// @return [ThemeData]
-  ThemeData getThemeData(bool isDark) {
+  /// @return [CupertinoThemeData] for iOS platform
+  CupertinoThemeData getCupertinoThemeData(bool isDark) {
+    return CupertinoThemeData(
+      brightness: isDark? Brightness.dark : Brightness.light,
+      primaryColor: _currentIThemeColor,
+      // reference: _CupertinoThemeDefaults@line: 19
+      primaryContrastingColor: CupertinoColors.systemBackground
+    );
+  }
+
+  /// get current [ThemeData] with custom color
+  /// @param [bool] whether is Dark theme
+  /// @return [ThemeData] for Android platform
+  ThemeData getMaterialThemeData(bool isDark) {
     return ThemeData(
       brightness: isDark? Brightness.dark : Brightness.light,
-      primaryColor: _currentThemeColor,
-      primarySwatch: _currentThemeColor
+      primaryColor: _currentAThemeColor,
+      primarySwatch: _currentAThemeColor
+    );
+  }
+
+  /// change color's brightness
+  /// @param [Color]
+  /// @param [value] brightness value. positive number means brighter, negative number means darker
+  Color _changeBrightness(Color color, double value) {
+    final HSLColor hslColor = HSLColor.fromColor(color);
+    final double finalBrightnessValue = (hslColor.lightness + value > 1.0) ? 1.0 : (hslColor.lightness + value);
+    final HSLColor resultColor = hslColor.withLightness(finalBrightnessValue);
+    return resultColor.toColor();
+  }
+
+  /// convert given [Color] into [CupertinoDynamicColor]
+  CupertinoDynamicColor _convertColor2CupertinoColor(Color color) {
+    final Color light = _changeBrightness(color, 0.0);
+    final Color dark = _changeBrightness(color, -0.1);
+    return CupertinoDynamicColor(
+        color: light,
+        darkColor: dark,
+        highContrastColor: light,
+        darkHighContrastColor: dark,
+        elevatedColor: light,
+        darkElevatedColor: dark,
+        highContrastElevatedColor: light,
+        darkHighContrastElevatedColor: dark,
     );
   }
 
@@ -62,20 +100,13 @@ class ThemeViewModel extends ChangeNotifier {
   /// @param [Color]
   /// @return [MaterialColor] can be used as [ThemeData.primaryColor] and [ThemeData.primarySwatch]
   MaterialColor _convertColor2MaterialColor(Color color) {
-    Color changeBrightness(Color color, double value) {
-      final HSLColor hslColor = HSLColor.fromColor(color);
-      final double finalBrightnessValue = (hslColor.lightness + value > 1.0) ? 1.0 : (hslColor.lightness + value);
-      final HSLColor resultColor = hslColor.withLightness(finalBrightnessValue);
-      return resultColor.toColor();
-    }
-
     final LinkedHashMap<int, Color> colorMap = LinkedHashMap();
     const List<int> levels = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
     const double brightnessLevel = 0.1;
     double changeValue = 0.5;
 
     for(int i in levels) {
-      colorMap[i] = changeBrightness(color, changeValue);
+      colorMap[i] = _changeBrightness(color, changeValue);
       changeValue -= brightnessLevel;
     }
 
