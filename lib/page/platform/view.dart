@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_playground/base/cross_platform.dart';
 import 'package:flutter_playground/widget/app_bar.dart';
 
+import '../../widget/platform/app_bar.dart';
+
 class PlatformCodeView extends StatefulWidget {
   const PlatformCodeView({Key? key}) : super(key: key);
 
@@ -41,7 +43,10 @@ class _PlatformCodeView extends State<PlatformCodeView> {
       getSystemVersion();
     }
     return Scaffold(
-      appBar: createAppBar(context, "Platform specific code", true),
+      appBar: PlatformAppBar(
+          context: context,
+          title: "Platform specific code"
+      ).getAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(

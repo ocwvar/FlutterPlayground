@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
+
+import '../../widget/platform/app_bar.dart';
 
 class TextStylesView extends StatelessWidget {
   const TextStylesView({Key? key}) : super(key: key);
@@ -7,7 +8,10 @@ class TextStylesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(context, "Text styles", true),
+      appBar: PlatformAppBar(
+          context: context,
+          title: "Text styles"
+      ).getAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(

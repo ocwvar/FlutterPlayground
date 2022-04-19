@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/demo_account/models/account.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
+
+import '../../../widget/platform/app_bar.dart';
 
 class VerifyPageView extends StatelessWidget {
 
@@ -12,7 +13,10 @@ class VerifyPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(context, "Verify", true),
+      appBar: PlatformAppBar(
+          context: context,
+          title: "Verify"
+      ).getAppBar(),
       body: ListView.separated(
           padding: const EdgeInsets.all(8),
           itemBuilder: (context, index) {

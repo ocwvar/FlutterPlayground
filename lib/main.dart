@@ -3,7 +3,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_playground/base/theme_view_model.dart';
 import 'package:flutter_playground/generated/l10n.dart';
 import 'package:flutter_playground/page/home/view.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
 import 'package:provider/provider.dart';
 
 void main() {

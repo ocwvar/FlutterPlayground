@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
 import 'package:flutter_playground/widget/list_item.dart';
+
+import '../../widget/platform/app_bar.dart';
 
 class KeepStateView extends StatefulWidget {
   const KeepStateView({Key? key}) : super(key: key);
@@ -16,7 +17,10 @@ class _KeepStateView extends State<KeepStateView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(context, "Page state keeping", true),
+      appBar: PlatformAppBar(
+          context: context,
+          title: "Page state keeping"
+      ).getAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(

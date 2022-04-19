@@ -8,8 +8,8 @@ import 'package:flutter_playground/page/platform/view.dart';
 import 'package:flutter_playground/page/remote_image/view.dart';
 import 'package:flutter_playground/page/system_info/view.dart';
 import 'package:flutter_playground/widget/list_item.dart';
+import 'package:flutter_playground/widget/platform/app_bar.dart';
 
-import '../../widget/app_bar.dart';
 import '../blur/view.dart';
 import '../keep_state/view.dart';
 import '../text_styles/view.dart';
@@ -32,7 +32,11 @@ class _HomeView extends State<HomeView> {
     final HomeModel model = HomeModel();
 
     return Scaffold(
-      appBar: createAppBar(context, "Playground", false),
+      appBar: PlatformAppBar(
+          context: context,
+          title: "Home",
+          hasBackAction: false
+      ).getAppBar(),
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

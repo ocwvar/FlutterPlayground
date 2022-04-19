@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/demo_account/account_type/model.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
 
+import '../../../widget/platform/app_bar.dart';
 import '../models/account_types.dart';
 
 class AccountTypeView extends StatelessWidget {
@@ -12,13 +12,17 @@ class AccountTypeView extends StatelessWidget {
     _model.init();
 
     return Scaffold(
-      appBar: createAppBar(context, "Account Types", true),
+      appBar:
+          PlatformAppBar(context: context, title: "Account Types").getAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(12),
-            child: Text("Please select your account type", style: Theme.of(context).textTheme.subtitle2,),
+            child: Text(
+              "Please select your account type",
+              style: Theme.of(context).textTheme.subtitle2,
+            ),
           ),
           Expanded(
             child: ListView.separated(
@@ -36,18 +40,26 @@ class AccountTypeView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(detail.typeName, style: Theme.of(context).textTheme.headline5,),
-                              const SizedBox(height: 6,),
-                              Text(detail.description, style: Theme.of(context).textTheme.caption,)
+                              Text(
+                                detail.typeName,
+                                style: Theme.of(context).textTheme.headline5,
+                              ),
+                              const SizedBox(
+                                height: 6,
+                              ),
+                              Text(
+                                detail.description,
+                                style: Theme.of(context).textTheme.caption,
+                              )
                             ],
                           ),
-                        )
-                    ),
+                        )),
                   );
                 },
-                separatorBuilder: (context, index) => const SizedBox(height: 8,) ,
-                itemCount: _model.list.length
-            ),
+                separatorBuilder: (context, index) => const SizedBox(
+                      height: 8,
+                    ),
+                itemCount: _model.list.length),
           )
         ],
       ),
@@ -58,5 +70,4 @@ class AccountTypeView extends StatelessWidget {
   void onSelectedAccountType(BuildContext context, AccountTypeDetail detail) {
     Navigator.pop(context, detail);
   }
-
 }

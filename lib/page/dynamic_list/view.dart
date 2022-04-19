@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/dynamic_list/repository.dart';
 import 'package:flutter_playground/page/dynamic_list/view_model.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
 import 'package:flutter_playground/widget/list_item.dart';
 import 'package:provider/provider.dart';
+
+import '../../widget/platform/app_bar.dart';
 
 class DynamicListView extends StatefulWidget {
   const DynamicListView({Key? key}) : super(key: key);
@@ -33,7 +34,10 @@ class _DynamicListView extends State<DynamicListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: createAppBar(context, "Dynamic list", true),
+        appBar: PlatformAppBar(
+            context: context,
+            title: "Dynamic list content"
+        ).getAppBar(),
         body: ChangeNotifierProvider(
           create: (context) => DynamicListViewModel(),
           child: Consumer<DynamicListViewModel>(

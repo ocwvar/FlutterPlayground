@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
+
+import '../../widget/platform/app_bar.dart';
 
 class SystemInfoView extends StatelessWidget {
   const SystemInfoView({Key? key}) : super(key: key);
@@ -9,7 +10,10 @@ class SystemInfoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(context, "System information", true),
+      appBar: PlatformAppBar(
+          context: context,
+          title: "System information"
+      ).getAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(

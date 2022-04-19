@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/language/model.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
 
 import '../../generated/l10n.dart';
+import '../../widget/platform/app_bar.dart';
 
 class LanguageView extends StatefulWidget {
 
@@ -20,7 +20,10 @@ class _LanguageView extends State<LanguageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(context, "Multi language", true),
+      appBar: PlatformAppBar(
+          context: context,
+          title: "Multi language"
+      ).getAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(
