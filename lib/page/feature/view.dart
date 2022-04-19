@@ -10,6 +10,7 @@ import 'package:flutter_playground/widget/platform/app_bar.dart';
 import 'package:flutter_playground/widget/platform/list_item.dart';
 import 'package:flutter_playground/widget/platform/scaffold.dart';
 
+import '../../widget/platform/platform_extension.dart';
 import '../blur/view.dart';
 import '../keep_state/view.dart';
 import '../text_styles/view.dart';
@@ -93,7 +94,7 @@ class _FeatureView extends State<FeatureView> {
     // if cant find matching page, will not pass click event to list item
     final Function() onClick = page == null ? (){} : () =>
     {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => page))
+      PlatformNavigator.pushByPlatform(context, page)
     };
 
     return PlatformListItem(title: pageModel.title, onPressed: onClick);

@@ -10,6 +10,7 @@ import 'package:flutter_playground/page/demo_account/verify/view.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widget/platform/app_bar.dart';
+import '../../../widget/platform/scaffold.dart';
 
 class AccountListView extends StatefulWidget {
   const AccountListView({Key? key}) : super(key: key);
@@ -41,9 +42,9 @@ class _AccountListView extends State<AccountListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PlatformAppBar(context: context, title: "Account management")
-          .getAppBar(),
+    return PlatformScaffold(
+      isiOSLargeStyle: true,
+      platformAppBar: PlatformAppBar(context: context, title: "Account management"),
       body: ChangeNotifierProvider(
         create: (context) => AccountListViewModel(),
         child: Consumer<AccountListViewModel>(

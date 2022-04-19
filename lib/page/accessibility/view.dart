@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 
 import '../../widget/platform/app_bar.dart';
+import '../../widget/platform/scaffold.dart';
 
 class AccessibilityView extends StatefulWidget {
   const AccessibilityView({Key? key}) : super(key: key);
@@ -18,11 +19,12 @@ class _AccessibilityView extends State<AccessibilityView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PlatformAppBar(
+    return PlatformScaffold(
+      isiOSLargeStyle: true,
+      platformAppBar: PlatformAppBar(
           context: context,
           title: "Accessibility"
-      ).getAppBar(),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(

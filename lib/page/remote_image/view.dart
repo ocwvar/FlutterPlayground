@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_playground/base/base_remote_view_model.dart';
 import 'package:flutter_playground/page/remote_image/model.dart';
 import 'package:flutter_playground/page/remote_image/view_model.dart';
+import 'package:flutter_playground/widget/platform/scaffold.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/platform/app_bar.dart';
@@ -50,11 +51,12 @@ class _RemoteImageView extends State<RemoteImageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PlatformAppBar(
+    return PlatformScaffold(
+      isiOSLargeStyle: true,
+      platformAppBar: PlatformAppBar(
           context: context,
           title: "Remote image fetching"
-      ).getAppBar(),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: ChangeNotifierProvider(

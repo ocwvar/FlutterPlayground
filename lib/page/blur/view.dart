@@ -3,6 +3,7 @@ import 'package:flutter_playground/widget/blur.dart';
 
 import '../../generated/l10n.dart';
 import '../../widget/platform/app_bar.dart';
+import '../../widget/platform/scaffold.dart';
 
 class BlurDemoView extends StatefulWidget {
   const BlurDemoView({Key? key}) : super(key: key);
@@ -15,11 +16,12 @@ class _BlurDemoView extends State<BlurDemoView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PlatformAppBar(
+    return PlatformScaffold(
+      isiOSLargeStyle: true,
+      platformAppBar: PlatformAppBar(
           context: context,
           title: "Blur effect"
-      ).getAppBar(),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(0),
         child: Stack(
