@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/widget/platform/base.dart';
 
-class PlatformButton extends BasePlatformWidget<ElevatedButton, CupertinoButton> {
+class PlatformButton extends BasePlatformWidget<ElevatedButton, Widget> {
 
   final Widget child;
   final Function() onPressed;
@@ -34,12 +34,15 @@ class PlatformButton extends BasePlatformWidget<ElevatedButton, CupertinoButton>
   }
 
   @override
-  CupertinoButton createIOSObject(BuildContext arg) {
+  Widget createIOSObject(BuildContext arg) {
     if (iosButtonColor == null) {
-      return CupertinoButton.filled(
-          onPressed: isDisable ? null : onPressed,
-          child: child,
-          padding: iosButtonPadding ?? _defaultIosButtonPadding
+      return Padding(
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
+        child: CupertinoButton.filled(
+            onPressed: isDisable ? null : onPressed,
+            child: child,
+            padding: iosButtonPadding ?? _defaultIosButtonPadding
+        ),
       );
     }
 
