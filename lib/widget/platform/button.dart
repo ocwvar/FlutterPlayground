@@ -49,6 +49,7 @@ class PlatformIconTextButton extends BasePlatformWidget<Widget, CupertinoButton>
   @override
   CupertinoButton createIOSObject(BuildContext arg) {
     return CupertinoButton(
+        padding: EdgeInsets.zero,
         onPressed: isDisable ? null : onPressed,
         child: Padding(
           padding: padding,

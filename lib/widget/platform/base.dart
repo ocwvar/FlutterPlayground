@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_playground/base/platform_control.dart';
@@ -22,8 +21,6 @@ abstract class BasePlatformWidget<ANDROID extends Widget, IOS extends Widget>
     extends StatelessWidget
     implements IPlatformObjectSelector<ANDROID, IOS, Widget, BuildContext>
 {
-
-  bool get isRunningAndroid => Platform.isAndroid;
   const BasePlatformWidget({Key? key}) : super(key: key);
 
   @override

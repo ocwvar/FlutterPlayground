@@ -97,7 +97,11 @@ class _AccountListView extends State<AccountListView> {
                   // the last one should be "add account" button
                   itemCount: viewModel.displayList.length + 1,
                 )),
-                SubmitButton("Submit", viewModel.canSubmit, () => _submit(viewModel))
+                SubmitButton(
+                    title: "Submit",
+                    isEnable: viewModel.canSubmit,
+                    onPressed: () => _submit(viewModel)
+                )
               ],
             );
           },

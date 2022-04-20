@@ -8,6 +8,7 @@ import 'package:flutter_playground/widget/platform/input_field.dart';
 import 'package:flutter_playground/widget/platform/styles.dart';
 
 import '../../../widget/platform/button.dart';
+import '../../../widget/platform/click_effect.dart';
 
 class AccountCardView extends StatelessWidget {
 
@@ -53,8 +54,8 @@ class AccountCardView extends StatelessWidget {
           // account type selection
           SizedBox(
             width: double.infinity,
-            child: GestureDetector(
-              onTap: () {
+            child: SimpleClickEffect(
+              onPressed: () {
                 onUnFocusCurrentActiveFocusNode.call();
                 onSelectAccountType.call();
               },
@@ -75,8 +76,8 @@ class AccountCardView extends StatelessWidget {
           // account balance currency type
           SizedBox(
             width: double.infinity,
-            child: GestureDetector(
-              onTap: () {
+            child: SimpleClickEffect(
+              onPressed: () {
                 onUnFocusCurrentActiveFocusNode.call();
                 onSelectCurrencyType.call();
               },
@@ -251,49 +252,50 @@ class AddAccountButtonView extends StatelessWidget {
 
 class SubmitButton extends StatelessWidget {
 
-  final String _title;
-  final Function() _onClick;
-  final bool enable;
+  final String title;
+  final Function() onPressed;
+  final bool isEnable;
 
-  const SubmitButton(this._title, this.enable, this._onClick, {Key? key}) : super(key: key);
+  const SubmitButton({
+    Key? key,
+    required this.title,
+    required this.isEnable,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: ColoredBox(
-        color: getStatusColor(context),
-        child: Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 15),
-              child: Text(_title, style: const TextStyle(color: Colors.white, fontSize: 18)),
-            ),
-            Positioned.fill(
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.white.withOpacity(0.3),
-                  onTap: (){
-                    if (enable) {
-                      _onClick.call();
-                    }
-                  },
-                ),
+      child: SimpleClickEffect(
+        child: ColoredBox(
+          color: getStatusColor(context),
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 15, bottom: 15),
+                child: Text(title, style: const TextStyle(color: Colors.white, fontSize: 18)),
               ),
-            )
-          ],
+            ],
+          ),
         ),
+        onPressed: () {
+          if (isEnable) {
+            onPressed.call();
+          }
+        },
       ),
     );
   }
 
   Color getStatusColor(BuildContext context) {
     final Color statusColor;
-    if (enable) {
-      statusColor = Theme.of(context).primaryColor;
+    if (isEnable) {
+      statusColor = getNotNullablePlatformObject(
+          forAndroid: Theme.of(context).primaryColor,
+          forIOS: CupertinoTheme.of(context).primaryColor
+      );
     } else {
       statusColor = Colors.black12;
     }
