@@ -25,6 +25,7 @@ jobs:
         uses: actions/setup-java@v3.1.1
         with:
           java-version: "12.x"
+          distribution: "temurin"
         
       # setup flutter
       - name: "Setup flutter"
