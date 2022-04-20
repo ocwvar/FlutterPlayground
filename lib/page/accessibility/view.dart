@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter_playground/base/platform_control.dart';
+import 'package:flutter_playground/widget/platform/button.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
 
 import '../../widget/platform/app_bar.dart';
 import '../../widget/platform/scaffold.dart';
@@ -30,18 +34,18 @@ class _AccessibilityView extends State<AccessibilityView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Regular text", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Regular text", style: PlatformTextStyles.forTitle(context),),
             Text(_text),
             const SizedBox(height: 20,),
 
-            Text("Heading", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Heading", style: PlatformTextStyles.forTitle(context),),
             Semantics(
               child: Text(_text),
               header: true,
             ),
             const SizedBox(height: 20,),
 
-            Text("Description", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Description", style: PlatformTextStyles.forTitle(context),),
             Semantics(
               child: const ColoredBox(
                 color: Colors.blueAccent,
@@ -50,21 +54,21 @@ class _AccessibilityView extends State<AccessibilityView> {
             ),
             const SizedBox(height: 20,),
 
-            Text("Button", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Button", style: PlatformTextStyles.forTitle(context),),
             Semantics(
               child: Text(_text),
               button: true,
             ),
             const SizedBox(height: 20,),
 
-            Text("Not focusable", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Not focusable", style: PlatformTextStyles.forTitle(context),),
             Semantics(
               child: const Text("You can't read this"),
               hidden: true,
             ),
             const SizedBox(height: 20,),
 
-            Text("Combined views", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Combined views", style: PlatformTextStyles.forTitle(context),),
             Semantics(
               child: Card(
                 child: Padding(
@@ -85,34 +89,17 @@ class _AccessibilityView extends State<AccessibilityView> {
             ),
             const SizedBox(height: 20,),
 
-            Text("State views", style: Theme.of(context).textTheme.titleLarge,),
-            Row(
-              children: [
-                Column(
-                  children: [
-                    Checkbox(value: false, onChanged: (value){},),
-                    Switch(value: false, onChanged: (value){},),
-                    Radio(value: true, groupValue: false ,onChanged: (value){},),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Checkbox(value: true, onChanged: (value){},),
-                    Switch(value: true, onChanged: (value){},),
-                    Radio(value: false, groupValue: false ,onChanged: (value){},),
-                  ],
-                )
-              ],
-            ),
+            Text("State views", style: PlatformTextStyles.forTitle(context),),
+            createPlatformElementsPanel(),
             const SizedBox(height: 20,),
 
-            Text("Announce manually", style: Theme.of(context).textTheme.titleLarge,),
-            ElevatedButton(onPressed: () {
+            Text("Announce manually", style: PlatformTextStyles.forTitle(context),),
+            PlatformButton(onPressed: () {
               SemanticsService.announce("Hello there", TextDirection.ltr);
             }, child: const Text("Speck")),
             const SizedBox(height: 20,),
 
-            Text("Focus status", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Focus status", style: PlatformTextStyles.forTitle(context),),
             Semantics(
               child: getTextByFocusStatus(),
               onDidGainAccessibilityFocus: () => setState(() {
@@ -142,6 +129,44 @@ class _AccessibilityView extends State<AccessibilityView> {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Text(text, style: style,),
+    );
+  }
+
+  Widget createPlatformElementsPanel() {
+    if (PlatformControl.self.isRunningAndroid()) {
+      return Row(
+        children: [
+          Column(
+            children: [
+              Checkbox(value: false, onChanged: (value){},),
+              Switch(value: false, onChanged: (value){},),
+              Radio(value: true, groupValue: false ,onChanged: (value){},),
+            ],
+          ),
+          Column(
+            children: [
+              Checkbox(value: true, onChanged: (value){},),
+              Switch(value: true, onChanged: (value){},),
+              Radio(value: false, groupValue: false ,onChanged: (value){},),
+            ],
+          )
+        ],
+      );
+    }
+
+    return Row(
+      children: [
+        Column(
+          children: [
+            CupertinoSwitch(value: false, onChanged: (value){}),
+          ],
+        ),
+        Column(
+          children: [
+            CupertinoSwitch(value: true, onChanged: (value){}),
+          ],
+        )
+      ],
     );
   }
 
