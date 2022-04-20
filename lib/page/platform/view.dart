@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_playground/base/cross_platform.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
 
 import '../../widget/platform/app_bar.dart';
 import '../../widget/platform/scaffold.dart';
@@ -53,7 +54,7 @@ class _PlatformCodeView extends State<PlatformCodeView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("System version", style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.left,),
+            Text("System version", style: PlatformTextStyles.forTitle(context), textAlign: TextAlign.left,),
             const SizedBox(height: 20,),
             Text(_systemVersionString)
           ],
