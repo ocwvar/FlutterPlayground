@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/base/platform_control.dart';
 import 'package:flutter_playground/page/demo_account/account_list/currency_select_dialog.dart';
 import 'package:flutter_playground/page/demo_account/account_list/view_model.dart';
 import 'package:flutter_playground/page/demo_account/account_list/widgets.dart';
@@ -11,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../../widget/platform/app_bar.dart';
 import '../../../widget/platform/scaffold.dart';
+import 'currency_select_action_sheet.dart';
 
 class AccountListView extends StatefulWidget {
   const AccountListView({Key? key}) : super(key: key);
@@ -164,13 +167,50 @@ class _AccountListView extends State<AccountListView> {
 
   /// open a dialog to let user to select currency type
   void _onSelectCurrencyType(BuildContext context, AccountListViewModel viewModel, Account account) {
+
+    if (PlatformControl.self.isRunningAndroid()) {
+      _showAndroidCurrencySelector(context, viewModel, account);
+      return;
+    }
+
+    _showIOSCurrencySelector(context, viewModel, account);
+  }
+
+  /// display [CupertinoActionSheet] for IOS user to select currency type
+  void _showIOSCurrencySelector(BuildContext context, AccountListViewModel viewModel, Account account) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (dialogContext) {
+          return CurrencySelectionActionSheet(
+            title: "Select currency",
+            message: "Please select currency type of this account",
+            lastSelected: account.currency,
+            onCurrencySelected: (Currency selectedCurrency) {
+              if (selectedCurrency == account.currency) {
+                // ignored if clicked one is we already have
+                return;
+              }
+
+              // update viewModel
+              account.updateCurrencyType(selectedCurrency);
+              viewModel.update(account, true);
+              Navigator.pop(dialogContext);
+            },
+          );
+        }
+    );
+  }
+
+  /// display [Dialog] with simple list for Android user to select currency type
+  void _showAndroidCurrencySelector(BuildContext context, AccountListViewModel viewModel, Account account) {
     showDialog(
         context: context,
         builder: (dialogContext) => Dialog(
-              child: CurrencySelectionDialogView(
-                  "Select currency", account.currency,
-                  // callback when user clicked currency item
-                  (Currency selectedCurrency) {
+          child: CurrencySelectionDialogView(
+              title: "Select currency",
+              lastSelected: account.currency,
+              // callback when user clicked currency item
+              onCurrencySelected: (Currency selectedCurrency) {
                 if (selectedCurrency == account.currency) {
                   // ignored if clicked one is we already have
                   return;
@@ -180,7 +220,10 @@ class _AccountListView extends State<AccountListView> {
                 account.updateCurrencyType(selectedCurrency);
                 viewModel.update(account, true);
                 Navigator.pop(dialogContext);
-              }),
-            ));
+              }
+          ),
+        )
+    );
   }
+
 }

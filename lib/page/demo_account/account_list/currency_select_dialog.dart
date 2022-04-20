@@ -7,11 +7,17 @@ import '../../../widget/list_item.dart';
 /// this view is use in a dialog
 /// for user to select currency type
 class CurrencySelectionDialogView extends StatefulWidget {
-  final String _title;
-  final Currency? _lastSelected;
-  final Function(Currency currency) _onCurrencySelected;
+  final String title;
+  final Currency? lastSelected;
+  final Function(Currency currency) onCurrencySelected;
 
-  const CurrencySelectionDialogView(this._title, this._lastSelected, this._onCurrencySelected, {Key? key}) : super(key: key);
+  const CurrencySelectionDialogView({
+    Key? key,
+    required this.title,
+    required this.lastSelected,
+    required this.onCurrencySelected
+  }) : super(key: key);
+
 
   @override
   State createState() => _CurrencySelectionDialogView();
@@ -29,7 +35,7 @@ class _CurrencySelectionDialogView extends State<CurrencySelectionDialogView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget._title,
+            widget.title,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           ListView.separated(
@@ -38,13 +44,13 @@ class _CurrencySelectionDialogView extends State<CurrencySelectionDialogView> {
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 final SelectStateModel<Currency> model = SelectStateModel(values[index]);
-                model.updateSelectState(values[index] == widget._lastSelected);
+                model.updateSelectState(values[index] == widget.lastSelected);
 
                 return createRadioListItem(
                   context,
                   values[index].name.toUpperCase(),
                   model,
-                  (Currency selectedCurrency) => widget._onCurrencySelected.call(selectedCurrency)
+                  (Currency selectedCurrency) => widget.onCurrencySelected.call(selectedCurrency)
                 );
               },
               separatorBuilder: (context, index) => const SizedBox.shrink(),
