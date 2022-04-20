@@ -49,10 +49,21 @@ android {
         versionName flutterVersionName
     }
 
-    buildTypes {
+    signingConfigs {
         release {
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            keyAlias localProperties['keyAlias']
+            keyPassword localProperties['keyPassword']
+            storeFile localProperties['storeFile'] ? file(localProperties['storeFile']) : null
+            storePassword localProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+        debug {
             signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
         }
     }
 }
