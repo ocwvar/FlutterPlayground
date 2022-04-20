@@ -6,6 +6,14 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+def keyProperties = new Properties()
+def keyPropertiesFile = rootProject.file('key.properties')
+if (keyPropertiesFile.exists()) {
+    keyPropertiesFile.withReader('UTF-8') { reader ->
+        keyProperties.load(reader)
+    }
+}
+
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
@@ -51,10 +59,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias localProperties['keyAlias']
-            keyPassword localProperties['keyPassword']
-            storeFile localProperties['storeFile'] ? file(localProperties['storeFile']) : null
-            storePassword localProperties['storePassword']
+            keyAlias keyProperties['aliasName']
+            keyPassword keyProperties['password']
+            storeFile keyProperties['signFilePath'] ? file(keyProperties['signFilePath']) : null
+            storePassword keyProperties['password']
         }
     }
 
