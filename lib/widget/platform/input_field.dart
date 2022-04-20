@@ -59,6 +59,7 @@ class PlatformInputField extends BasePlatformWidget<TextField, Widget> {
       children: [
         // label
         _getIOSHeader(arg),
+        const SizedBox(height: 8,),
         CupertinoTextField(
           padding: const EdgeInsets.all(8),
           placeholder: hint,
