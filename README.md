@@ -12,6 +12,7 @@ Flutter demo
 - CrossPlatform function calling
 - Accessibility showcases
 - Blur effect
+- Android and iOS style for all pages
 
 Complex demo:
 - Account management
