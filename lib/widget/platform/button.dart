@@ -66,7 +66,7 @@ class PlatformIconTextButton extends BasePlatformWidget<Widget, CupertinoButton>
 
 }
 
-class PlatformIconButton extends BasePlatformWidget<IconButton, CupertinoButton> {
+class PlatformIconButton extends BasePlatformWidget<Widget, CupertinoButton> {
 
   final Icon icon;
   final Function() onPressed;
@@ -78,13 +78,23 @@ class PlatformIconButton extends BasePlatformWidget<IconButton, CupertinoButton>
   }) : super(key: key);
 
   @override
-  IconButton createAndroidObject(BuildContext arg) {
-    return IconButton(onPressed: onPressed, icon: icon);
+  Widget createAndroidObject(BuildContext arg) {
+    return InkWell(
+      onTap: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: icon,
+      ),
+    );
   }
 
   @override
   CupertinoButton createIOSObject(BuildContext arg) {
-    return CupertinoButton(child: icon, onPressed: onPressed,);
+    return CupertinoButton(
+      child: icon,
+      onPressed: onPressed,
+      padding: const EdgeInsets.all(8),
+    );
   }
 
 }
