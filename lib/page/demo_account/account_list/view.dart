@@ -12,6 +12,7 @@ import 'package:flutter_playground/page/demo_account/verify/view.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widget/platform/app_bar.dart';
+import '../../../widget/platform/platform_extension.dart';
 import '../../../widget/platform/scaffold.dart';
 import 'currency_select_action_sheet.dart';
 
@@ -118,9 +119,7 @@ class _AccountListView extends State<AccountListView> {
   /// submit all account
   void _submit(AccountListViewModel viewModel) {
     _getCurrentActiveFocus()?.unfocus();
-    Navigator.push(context, MaterialPageRoute(
-            builder: (context) => VerifyPageView((viewModel.readOnlyAccountList))
-    ));
+    PlatformNavigator.pushByPlatform(context, VerifyPageView((viewModel.readOnlyAccountList)));
   }
 
   /// get current focus node
@@ -155,8 +154,7 @@ class _AccountListView extends State<AccountListView> {
   /// jump to page [AccountTypeView] to let use choose their account type
   /// @param [index] which item has been clicked
   void _onSelectAccountType(BuildContext context, AccountListViewModel viewModel, Account account) async {
-    final AccountTypeDetail? result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AccountTypeView()));
+    final AccountTypeDetail? result = await PlatformNavigator.pushByPlatform(context, AccountTypeView());
     if (result == null) {
       // when user click back button will return NULL result
       return;
