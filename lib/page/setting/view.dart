@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/base/theme_view_model.dart';
 import 'package:flutter_playground/widget/platform/scaffold.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
 
 import '../../base/platform_control.dart';
 import '../../widget/platform/app_bar.dart';
-import '../../widget/platform/base.dart';
 import '../../widget/platform/button.dart';
 import '../../widget/platform/platform_extension.dart';
 import '../feature/view.dart';
@@ -31,30 +30,21 @@ class SettingView extends StatelessWidget {
                 // day-night panel
                 Padding(
                     padding: const EdgeInsets.only(left: 8, top: 20),
-                    child: Text("DayNight control", style: getNullablePlatformObject<TextStyle>(
-                        forAndroid: Theme.of(context).textTheme.titleMedium,
-                        forIOS: CupertinoTheme.of(context).textTheme.textStyle
-                    ))
+                    child: Text("DayNight control", style: PlatformTextStyles.forTitle(context))
                 ),
                 createDayNightButtonPanel(context),
 
                 // platform version panel
                 Padding(
                     padding: const EdgeInsets.only(left: 8, top: 8),
-                    child: Text("Platform style", style: getNullablePlatformObject<TextStyle>(
-                        forAndroid: Theme.of(context).textTheme.titleMedium,
-                        forIOS: CupertinoTheme.of(context).textTheme.textStyle
-                    ))
+                    child: Text("Platform style", style: PlatformTextStyles.forTitle(context))
                 ),
                 createPlatformButtonPanel(context),
 
                 // theme color panel
                 Padding(
                     padding: const EdgeInsets.only(left: 8, top: 8),
-                    child: Text("Theme color control", style: getNullablePlatformObject<TextStyle>(
-                        forAndroid: Theme.of(context).textTheme.titleMedium,
-                        forIOS: CupertinoTheme.of(context).textTheme.textStyle
-                    ))
+                    child: Text("Theme color control", style: PlatformTextStyles.forTitle(context))
                 ),
                 createThemeColorPanel(context),
 
