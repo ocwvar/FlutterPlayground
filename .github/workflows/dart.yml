@@ -36,13 +36,13 @@ jobs:
         run: flutter pub get
 
       # begin to build
-      - name: "Build debug APK"
-        run: flutter build apk --debug
-        
+      - name: "Begin run build_release.sh for Android"
+        run: android/build_release.sh ${{ secrets.BUILD_SIGN_PASSWORD }} ${{ secrets.BUILD_SIGN_ALIAS }} ${{ secrets.BUILD_SIGN_BASE64_SIGN_FILE }}
+
       # push to release
       - name: "Push to Releases"
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/debug/*"
+          artifacts: "build/app/outputs/apk/release/*"
           tag: v${{ github.run_number }}
           token: ${{ secrets.BUILD_TOKEN }}
