@@ -1,4 +1,16 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_playground/base/platform_control.dart';
+
+Widget wrapClickEffect({required Widget child, required Function() onPressed}) {
+  if (PlatformControl.self.isRunningAndroid()) {
+    return InkWell(
+      child: child,
+      onTap: onPressed,
+    );
+  }
+
+  return SimpleClickEffect(child: child, onPressed: onPressed);
+}
 
 class SimpleClickEffect extends StatefulWidget {
   final Widget child;

@@ -1,19 +1,26 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/demo_account/account_type/model.dart';
+import 'package:flutter_playground/widget/platform/scaffold.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
 
 import '../../../widget/platform/app_bar.dart';
+import '../../../widget/platform/base.dart';
+import '../../../widget/platform/card.dart';
 import '../models/account_types.dart';
 
 class AccountTypeView extends StatelessWidget {
   final AccountTypeModel _model = AccountTypeModel();
 
+  AccountTypeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     _model.init();
 
-    return Scaffold(
-      appBar:
-          PlatformAppBar(context: context, title: "Account Types").getAppBar(),
+    return PlatformScaffold(
+      isiOSLargeStyle: false,
+      platformAppBar: PlatformAppBar(context: context, title: "Account Types"),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -21,7 +28,7 @@ class AccountTypeView extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             child: Text(
               "Please select your account type",
-              style: Theme.of(context).textTheme.subtitle2,
+              style: PlatformTextStyles.forContent(context),
             ),
           ),
           Expanded(
@@ -32,28 +39,31 @@ class AccountTypeView extends StatelessWidget {
 
                   return SizedBox(
                     width: double.infinity,
-                    child: OutlinedButton(
+                    child: PlatformCardView(
+                        padding: const EdgeInsets.all(12),
+                        cardColor: getNotNullablePlatformObject(
+                            forAndroid: Theme.of(context).cardColor,
+                            forIOS: CupertinoTheme.of(context).barBackgroundColor
+                        ),
                         onPressed: () => onSelectedAccountType(context, detail),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 12, bottom: 12),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                detail.typeName,
-                                style: Theme.of(context).textTheme.headline5,
-                              ),
-                              const SizedBox(
-                                height: 6,
-                              ),
-                              Text(
-                                detail.description,
-                                style: Theme.of(context).textTheme.caption,
-                              )
-                            ],
-                          ),
-                        )),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              detail.typeName,
+                              style: PlatformTextStyles.forTitle(context),
+                            ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              detail.description,
+                              style: PlatformTextStyles.forFootnote(context),
+                            )
+                          ],
+                        )
+                    ),
                   );
                 },
                 separatorBuilder: (context, index) => const SizedBox(

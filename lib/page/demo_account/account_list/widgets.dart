@@ -54,7 +54,7 @@ class AccountCardView extends StatelessWidget {
           // account type selection
           SizedBox(
             width: double.infinity,
-            child: SimpleClickEffect(
+            child: wrapClickEffect(
               onPressed: () {
                 onUnFocusCurrentActiveFocusNode.call();
                 onSelectAccountType.call();
@@ -76,7 +76,7 @@ class AccountCardView extends StatelessWidget {
           // account balance currency type
           SizedBox(
             width: double.infinity,
-            child: SimpleClickEffect(
+            child: wrapClickEffect(
               onPressed: () {
                 onUnFocusCurrentActiveFocusNode.call();
                 onSelectCurrencyType.call();

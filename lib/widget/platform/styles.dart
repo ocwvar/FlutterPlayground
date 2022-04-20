@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/widget/platform/base.dart';
 
@@ -20,7 +19,7 @@ class PlatformTextStyles {
   static TextStyle? forContent(BuildContext context) {
     return getNullablePlatformObject(
         forAndroid: Theme.of(context).textTheme.bodyText2,
-        forIOS: CupertinoTheme.of(context).textTheme.textStyle
+        forIOS: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w400)
     );
   }
 
