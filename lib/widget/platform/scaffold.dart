@@ -9,11 +9,14 @@ class PlatformScaffold extends BasePlatformWidget<Scaffold, CupertinoPageScaffol
   final bool isiOSLargeStyle;
   final Widget body;
 
+  final ScrollController? iOSScrollController;
+
   const PlatformScaffold({
     Key? key,
     required this.platformAppBar,
     required this.body,
-    this.isiOSLargeStyle = false
+    this.isiOSLargeStyle = false,
+    this.iOSScrollController
   }) : super(key: key);
 
   @override
@@ -29,6 +32,7 @@ class PlatformScaffold extends BasePlatformWidget<Scaffold, CupertinoPageScaffol
     if (isiOSLargeStyle) {
       return CupertinoPageScaffold(
         child: NestedScrollView(
+          controller: iOSScrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled){
             return <Widget>[
               CupertinoSliverNavigationBar(

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/widget/platform/base.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
 
 class PlatformListItem extends BasePlatformWidget<Widget, Widget> {
 
@@ -25,9 +26,8 @@ class PlatformListItem extends BasePlatformWidget<Widget, Widget> {
                 width: double.infinity,
                 child: Text(
                   title,
-                  style: TextStyle(color: Theme.of(arg).textTheme.titleMedium?.color),
-                ),
-              )
+                  style: PlatformTextStyles.forContent(arg)),
+              ),
           ),
           const Divider(height: 1,thickness: 1,),
         ],
@@ -43,7 +43,7 @@ class PlatformListItem extends BasePlatformWidget<Widget, Widget> {
         SizedBox(
           width: double.infinity,
           child: CupertinoButton(
-            child: Text(title, style: CupertinoTheme.of(arg).textTheme.textStyle,),
+            child: Text(title, style: PlatformTextStyles.forContent(arg),),
             onPressed: onPressed,
             padding: const EdgeInsets.all(12),
             alignment: AlignmentDirectional.centerStart,

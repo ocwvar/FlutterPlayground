@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/dynamic_list/repository.dart';
 import 'package:flutter_playground/page/dynamic_list/view_model.dart';
-import 'package:flutter_playground/widget/list_item.dart';
+import 'package:flutter_playground/widget/platform/list_item.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/platform/app_bar.dart';
+import '../../widget/platform/button.dart';
 import '../../widget/platform/scaffold.dart';
 
 class DynamicListView extends StatefulWidget {
@@ -35,7 +36,7 @@ class _DynamicListView extends State<DynamicListView> {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-        isiOSLargeStyle: true,
+        isiOSLargeStyle: false,
         platformAppBar: PlatformAppBar(
             context: context,
             title: "Dynamic list content"
@@ -54,7 +55,7 @@ class _DynamicListView extends State<DynamicListView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Spacer(),
-                        ElevatedButton(
+                        PlatformButton(
                           onPressed: () {
                             _scrollDown2Bottom();
                             _addItem(viewModel);
@@ -62,7 +63,7 @@ class _DynamicListView extends State<DynamicListView> {
                           child: const Text("Add item"),
                         ),
                         const Spacer(),
-                        ElevatedButton(
+                        PlatformButton(
                           onPressed: () {
                             _removeItem(viewModel);
                           },
@@ -75,15 +76,16 @@ class _DynamicListView extends State<DynamicListView> {
                 ),
 
                 // child 2 -> content list
-                Flexible(
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    itemBuilder: (context, index) {
-                      final SimpleItemModel model = viewModel.index(index);
-                      return createListItem(context, model.text1, true, () => _onItemClick(model));
-                    },
-                    itemCount: viewModel.count(),
-                  ),
+                Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      controller: _scrollController,
+                      itemBuilder: (context, index) {
+                        final SimpleItemModel model = viewModel.index(index);
+                        return PlatformListItem(title: model.text1, onPressed: () => _onItemClick(model));
+                      },
+                      itemCount: viewModel.count(),
+                    )
                 )
 
               ]);
