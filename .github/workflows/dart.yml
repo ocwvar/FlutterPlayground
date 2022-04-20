@@ -33,15 +33,13 @@ jobs:
         
       # setup all dependencies
       - name: "Install dependencies"
-        run: dart pub get
+        run: flutter pub get
 
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
-      - name: "Analyze project source"
-        run: dart analyze
-
+      # begin to build
       - name: "Build debug APK"
         run: flutter build apk --debug
         
+      # push to release
       - name: "Push to Releases"
         uses: ncipollo/release-action@v1
         with:
