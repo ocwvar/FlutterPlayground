@@ -63,43 +63,45 @@ class _AccountListView extends State<AccountListView> {
               children: [
                 Expanded(
                     child: ListView.separated(
-                  controller: _scrollController,
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 8,
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  itemBuilder: (context, index) {
-                    // for the last one, should be "add account" button
-                    if (index == viewModel.displayList.length) {
-                      final bool reachLimit =
-                          viewModel.displayList.length == _maxAccountCardNumber;
-                      return AddAccountButtonView(reachLimit, () {
-                        _getCurrentActiveFocus()?.unfocus();
-                        _addNewAccountCard(viewModel, true);
-                      });
-                    }
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(8),
+                        controller: _scrollController,
+                        // the last one should be "add account" button
+                        itemCount: viewModel.displayList.length + 1,
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 8,
+                        ),
+                        itemBuilder: (context, index) {
+                          // for the last one, should be "add account" button
+                          if (index == viewModel.displayList.length) {
+                            final bool reachLimit =
+                                viewModel.displayList.length == _maxAccountCardNumber;
+                            return AddAccountButtonView(reachLimit, () {
+                              _getCurrentActiveFocus()?.unfocus();
+                              _addNewAccountCard(viewModel, true);
+                            });
+                          }
 
-                    final AccountDisplayModel model =
-                        viewModel.displayList[index];
-                    final FocusNode? accountNoFocusNode =
-                        _itemInputFocusNodes[model.account.id];
-                    if (accountNoFocusNode == null) {
-                      // if we cant get focus, then we just ignore it
-                      return const SizedBox.shrink();
-                    }
+                          final AccountDisplayModel model =
+                              viewModel.displayList[index];
+                          final FocusNode? accountNoFocusNode =
+                              _itemInputFocusNodes[model.account.id];
+                          if (accountNoFocusNode == null) {
+                            // if we cant get focus, then we just ignore it
+                            return const SizedBox.shrink();
+                          }
 
-                    return AccountCardView(
-                        index: index,
-                        accountViewModel: viewModel,
-                        accountInputFocusNode: accountNoFocusNode,
-                        onUnFocusCurrentActiveFocusNode: () => _getCurrentActiveFocus()?.unfocus(),
-                        onSelectAccountType: () => _onSelectAccountType(context, viewModel, model.account),
-                        onSelectCurrencyType: () => _onSelectCurrencyType(context, viewModel, model.account)
-                    );
-                  },
-                  // the last one should be "add account" button
-                  itemCount: viewModel.displayList.length + 1,
-                )),
+                          return AccountCardView(
+                              index: index,
+                              accountViewModel: viewModel,
+                              accountInputFocusNode: accountNoFocusNode,
+                              onUnFocusCurrentActiveFocusNode: () => _getCurrentActiveFocus()?.unfocus(),
+                              onSelectAccountType: () => _onSelectAccountType(context, viewModel, model.account),
+                              onSelectCurrencyType: () => _onSelectCurrencyType(context, viewModel, model.account)
+                          );
+                      },
+                    )
+                ),
                 SubmitButton(
                     title: "Submit",
                     isEnable: viewModel.canSubmit,

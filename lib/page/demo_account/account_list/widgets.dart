@@ -35,10 +35,6 @@ class AccountCardView extends StatelessWidget {
 
     return PlatformCardView(
       padding: const EdgeInsets.all(12),
-      cardColor: getNotNullablePlatformObject(
-          forAndroid: Theme.of(context).cardColor,
-          forIOS: CupertinoTheme.of(context).barBackgroundColor
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

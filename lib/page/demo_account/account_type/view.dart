@@ -5,7 +5,6 @@ import 'package:flutter_playground/widget/platform/scaffold.dart';
 import 'package:flutter_playground/widget/platform/styles.dart';
 
 import '../../../widget/platform/app_bar.dart';
-import '../../../widget/platform/base.dart';
 import '../../../widget/platform/card.dart';
 import '../models/account_types.dart';
 
@@ -41,10 +40,6 @@ class AccountTypeView extends StatelessWidget {
                     width: double.infinity,
                     child: PlatformCardView(
                         padding: const EdgeInsets.all(12),
-                        cardColor: getNotNullablePlatformObject(
-                            forAndroid: Theme.of(context).cardColor,
-                            forIOS: CupertinoTheme.of(context).barBackgroundColor
-                        ),
                         onPressed: () => onSelectedAccountType(context, detail),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,

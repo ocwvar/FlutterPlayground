@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/demo_account/models/account.dart';
+import 'package:flutter_playground/widget/platform/card.dart';
+import 'package:flutter_playground/widget/platform/scaffold.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
 
 import '../../../widget/platform/app_bar.dart';
 
@@ -12,11 +15,11 @@ class VerifyPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PlatformAppBar(
+    return PlatformScaffold(
+      platformAppBar: PlatformAppBar(
           context: context,
           title: "Verify"
-      ).getAppBar(),
+      ),
       body: ListView.separated(
           padding: const EdgeInsets.all(8),
           itemBuilder: (context, index) {
@@ -43,29 +46,26 @@ class StatelessAccountCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // account number
-            Text(_account.accountNo, style: Theme.of(context).textTheme.headlineSmall,),
+    return PlatformCardView(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // account number
+          Text(_account.accountNo, style: PlatformTextStyles.forBigTitle(context),),
 
-            // account type
-            const SizedBox(height: 20,),
-            Text("Account Type", style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 6,),
-            Text(getAccountTypeString(), style: Theme.of(context).textTheme.caption),
+          // account type
+          const SizedBox(height: 20,),
+          Text("Account Type", style: PlatformTextStyles.forTitle(context)),
+          const SizedBox(height: 6,),
+          Text(getAccountTypeString(), style: PlatformTextStyles.forContent(context)),
 
-            // currency
-            const SizedBox(height: 20,),
-            Text("Balance currency type", style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 6,),
-            Text(_account.currency?.name.toUpperCase() ?? "", style: Theme.of(context).textTheme.caption)
-          ],
-        ),
+          // currency
+          const SizedBox(height: 20,),
+          Text("Balance currency type", style: PlatformTextStyles.forTitle(context)),
+          const SizedBox(height: 6,),
+          Text(_account.currency?.name.toUpperCase() ?? "", style: PlatformTextStyles.forContent(context))
+        ],
       ),
     );
   }
