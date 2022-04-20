@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_playground/base/cross_platform.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
+
+import '../../widget/platform/app_bar.dart';
+import '../../widget/platform/scaffold.dart';
 
 class PlatformCodeView extends StatefulWidget {
   const PlatformCodeView({Key? key}) : super(key: key);
@@ -40,14 +43,18 @@ class _PlatformCodeView extends State<PlatformCodeView> {
     if (_systemVersionString.isEmpty) {
       getSystemVersion();
     }
-    return Scaffold(
-      appBar: createAppBar(context, "Platform specific code", true),
+    return PlatformScaffold(
+      isiOSLargeStyle: true,
+      platformAppBar: PlatformAppBar(
+          context: context,
+          title: "Platform specific code"
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("System version", style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.left,),
+            Text("System version", style: PlatformTextStyles.forTitle(context), textAlign: TextAlign.left,),
             const SizedBox(height: 20,),
             Text(_systemVersionString)
           ],

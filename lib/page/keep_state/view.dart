@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
-import 'package:flutter_playground/widget/list_item.dart';
+import 'package:flutter_playground/widget/platform/input_field.dart';
+import 'package:flutter_playground/widget/platform/list_item.dart';
+
+import '../../widget/platform/app_bar.dart';
+import '../../widget/platform/scaffold.dart';
 
 class KeepStateView extends StatefulWidget {
   const KeepStateView({Key? key}) : super(key: key);
@@ -15,19 +18,24 @@ class _KeepStateView extends State<KeepStateView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: createAppBar(context, "Page state keeping", true),
+    return PlatformScaffold(
+      isiOSLargeStyle: false,
+      platformAppBar: PlatformAppBar(
+          context: context,
+          title: "Page state keeping"
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text("Try to input some text in InputField and scroll the ListView, and it will keep its state when you change state of this page.\n\n i.e.:screen rotation "),
             const SizedBox(height: 20,),
             Text(_text),
             const SizedBox(height: 20,),
-            TextField(
+            PlatformInputField(
               decoration: const InputDecoration(
-                label: Text("Content"),
+                hintText: "Input something here...",
               ),
               onChanged: (text) {
                 setState(() {
@@ -39,7 +47,7 @@ class _KeepStateView extends State<KeepStateView> {
             Expanded(
               child: ListView.builder(
                   itemBuilder: (context, index) {
-                    return createListItem(context, "Item ${index + 1}", true, null);
+                    return PlatformListItem(title: "Item ${index + 1}", onPressed:(){});
                   },
                 itemCount: 150,
               ),

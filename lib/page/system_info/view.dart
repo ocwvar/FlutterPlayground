@@ -1,53 +1,60 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
+import 'package:flutter_playground/widget/platform/scaffold.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
+
+import '../../widget/platform/app_bar.dart';
 
 class SystemInfoView extends StatelessWidget {
   const SystemInfoView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: createAppBar(context, "System information", true),
+    return PlatformScaffold(
+      isiOSLargeStyle: true,
+      platformAppBar: PlatformAppBar(
+          context: context,
+          title: "System information"
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Locale name", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Locale name", style: PlatformTextStyles.forTitle(context),),
             Text(Platform.localeName),
             const SizedBox(height: 20,),
 
-            Text("Path separator", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Path separator", style: PlatformTextStyles.forTitle(context),),
             Text(Platform.pathSeparator),
             const SizedBox(height: 20,),
 
-            Text("Local hostname", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Local hostname", style: PlatformTextStyles.forTitle(context),),
             Text(Platform.localHostname),
             const SizedBox(height: 20,),
 
-            Text("Operating system", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Operating system", style: PlatformTextStyles.forTitle(context),),
             Text(Platform.operatingSystem),
             const SizedBox(height: 20,),
 
-            Text("Operating system version", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Operating system version", style: PlatformTextStyles.forTitle(context),),
             Text(Platform.operatingSystemVersion),
             const SizedBox(height: 20,),
 
-            Text("Resolved executable", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Resolved executable", style: PlatformTextStyles.forTitle(context),),
             Text(Platform.resolvedExecutable),
             const SizedBox(height: 20,),
 
-            Text("Executable", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Executable", style: PlatformTextStyles.forTitle(context),),
             Text(getExecutableString()),
             const SizedBox(height: 20,),
 
-            Text("System type", style: Theme.of(context).textTheme.titleLarge,),
+            Text("System type", style: PlatformTextStyles.forTitle(context),),
             Text(currentSystemType()),
             const SizedBox(height: 20,),
 
-            Text("Environment arguments", style: Theme.of(context).textTheme.titleLarge,),
+            Text("Environment arguments", style: PlatformTextStyles.forTitle(context),),
             displayEnvArgus()
           ],
         ),

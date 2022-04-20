@@ -1,106 +1,117 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/demo_account/account_list/view_model.dart';
 import 'package:flutter_playground/page/demo_account/models/account.dart';
+import 'package:flutter_playground/widget/platform/base.dart';
+import 'package:flutter_playground/widget/platform/card.dart';
+import 'package:flutter_playground/widget/platform/input_field.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
+
+import '../../../widget/platform/button.dart';
+import '../../../widget/platform/click_effect.dart';
 
 class AccountCardView extends StatelessWidget {
 
-  final FocusNode _accountNoFocusNode;
-  final FocusNode? _currentActiveFocusNode;
-  final AccountListViewModel _viewModel;
-  final Function() _onSelectAccountType;
-  final Function() _onSelectCurrencyType;
-  final int _index;
+  final int index;
+  final AccountListViewModel accountViewModel;
+  final FocusNode accountInputFocusNode;
+  final Function() onUnFocusCurrentActiveFocusNode;
+  final Function() onSelectAccountType;
+  final Function() onSelectCurrencyType;
 
-  const AccountCardView(this._accountNoFocusNode, this._currentActiveFocusNode, this._viewModel, this._onSelectAccountType, this._onSelectCurrencyType, this._index, {Key? key}) : super(key: key);
+  const AccountCardView({
+      Key? key,
+      required this.index,
+      required this.accountViewModel,
+      required this.accountInputFocusNode,
+      required this.onUnFocusCurrentActiveFocusNode,
+      required this.onSelectAccountType,
+      required this.onSelectCurrencyType,
+      }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final AccountDisplayModel model = _viewModel.displayList[_index];
+    final AccountDisplayModel model = accountViewModel.displayList[index];
 
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // column 1 -- account number and delete button
-            Row(
-              children: [
-                Text("Account ${_index + 1}", style: Theme.of(context).textTheme.headline4,),
-                const Spacer(),
-                _deleteButtonVisibilityOf(_viewModel, model)
-              ],
+    return PlatformCardView(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // column 1 -- account number and delete button
+          Row(
+            children: [
+              Text("Account ${index + 1}", style: PlatformTextStyles.forBigTitle(context),),
+              const Spacer(),
+              _deleteButtonVisibilityOf(accountViewModel, model)
+            ],
+          ),
+
+          // account type selection
+          SizedBox(
+            width: double.infinity,
+            child: wrapClickEffect(
+              onPressed: () {
+                onUnFocusCurrentActiveFocusNode.call();
+                onSelectAccountType.call();
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Account Type", style: PlatformTextStyles.forTitle(context)),
+                    const SizedBox(height: 6,),
+                    Text(_getAccountTypeDesc(model.account), style: PlatformTextStyles.forContent(context))
+                  ],
+                ),
+              ),
             ),
+          ),
 
-            // account type selection
-            SizedBox(
+          // account balance currency type
+          SizedBox(
+            width: double.infinity,
+            child: wrapClickEffect(
+              onPressed: () {
+                onUnFocusCurrentActiveFocusNode.call();
+                onSelectCurrencyType.call();
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Balance currency type", style: PlatformTextStyles.forTitle(context)),
+                    const SizedBox(height: 6,),
+                    Text(_getAccountCurrencyDesc(model.account), style: PlatformTextStyles.forContent(context))
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // account no input field
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: SizedBox(
               width: double.infinity,
-              child: InkWell(
-                highlightColor: Colors.transparent,
-                onTap: () {
-                  _currentActiveFocusNode?.unfocus();
-                  _onSelectAccountType.call();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Account Type", style: Theme.of(context).textTheme.titleMedium),
-                      const SizedBox(height: 6,),
-                      Text(_getAccountTypeDesc(model.account), style: Theme.of(context).textTheme.caption)
-                    ],
-                  ),
-                ),
+              child: PlatformInputField(
+                  decoration: _getAccountNoInputDecorationOf(model),
+                  textInputAction: TextInputAction.done,
+                  maxLength: 13,
+                  autofocus: false,
+                  focusNode: accountInputFocusNode,
+                  keyboardType: TextInputType.number,
+                  onChanged: (text) {
+                    model.account.updateAccountNo(text);
+                    accountViewModel.update(model.account, true);
+                  },
+                  controller: _getAccountNoControlOf(model.account, accountInputFocusNode)
               ),
             ),
-
-            // account balance currency type
-            SizedBox(
-              width: double.infinity,
-              child: InkWell(
-                highlightColor: Colors.transparent,
-                onTap: () {
-                  _currentActiveFocusNode?.unfocus();
-                  _onSelectCurrencyType.call();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Balance currency type", style: Theme.of(context).textTheme.titleMedium),
-                      const SizedBox(height: 6,),
-                      Text(_getAccountCurrencyDesc(model.account), style: Theme.of(context).textTheme.caption)
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // account no input field
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: SizedBox(
-                width: double.infinity,
-                child: TextField(
-                    decoration: _getAccountNoInputDecorationOf(model),
-                    textInputAction: TextInputAction.done,
-                    maxLength: 13,
-                    autofocus: false,
-                    focusNode: _accountNoFocusNode,
-                    keyboardType: TextInputType.number,
-                    onChanged: (text) {
-                      model.account.updateAccountNo(text);
-                      _viewModel.update(model.account, true);
-                    },
-                    controller: _getAccountNoControlOf(model.account, _accountNoFocusNode)
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -150,7 +161,7 @@ class AccountCardView extends StatelessWidget {
     if (model.account.accountNo.isEmpty) {
       return const InputDecoration(
         labelText: "Account number",
-        suffixText: "example 123456-567890",
+        hintText: "example 123456-567890",
         errorText: "Please input account number",
       );
     }
@@ -160,7 +171,7 @@ class AccountCardView extends StatelessWidget {
       return const InputDecoration(
           labelText: "Account number",
           errorText: "Account number format is invalid",
-          suffixText: "example 123456-567890",
+          hintText: "example 123456-567890",
           errorStyle: TextStyle(color: Colors.deepOrangeAccent)
       );
     }
@@ -176,11 +187,11 @@ class AccountCardView extends StatelessWidget {
   /// @return [Widget]
   Widget _deleteButtonVisibilityOf(AccountListViewModel viewModel, AccountDisplayModel model) {
     if (viewModel.displayList.length > 1) {
-      return InkWell(
-        onTap: () => viewModel.remove(model.account.id),
-        child: const Padding(
-          padding: EdgeInsets.all(8),
-          child: Icon(Icons.highlight_remove),
+      return PlatformIconButton(
+        onPressed: () => viewModel.remove(model.account.id),
+        icon: getNotNullablePlatformObject(
+            forAndroid: const Icon(Icons.highlight_remove),
+            forIOS: const Icon(CupertinoIcons.clear_circled)
         ),
       );
     }
@@ -220,25 +231,16 @@ class AddAccountButtonView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (!_reachLimit) {
-          _onClick.call();
-        }
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Opacity(
-          opacity: getOpacityValuesByState(),
-          child: Row(
-            children: const [
-              Icon(Icons.add_circle_outline),
-              SizedBox(width: 20,),
-              Text("Add account")
-            ],
-          ),
-        ),
+    return PlatformIconTextButton(
+      icon: getNotNullablePlatformObject(
+          forAndroid: const Icon(Icons.add_circle_outline),
+          forIOS: const Icon(CupertinoIcons.add_circled)
       ),
+      text: "Add account",
+      padding: const EdgeInsets.all(12),
+      paddingOfIconToText: 20,
+      onPressed: _onClick,
+      isDisable: _reachLimit,
     );
   }
 
@@ -246,49 +248,50 @@ class AddAccountButtonView extends StatelessWidget {
 
 class SubmitButton extends StatelessWidget {
 
-  final String _title;
-  final Function() _onClick;
-  final bool enable;
+  final String title;
+  final Function() onPressed;
+  final bool isEnable;
 
-  const SubmitButton(this._title, this.enable, this._onClick, {Key? key}) : super(key: key);
+  const SubmitButton({
+    Key? key,
+    required this.title,
+    required this.isEnable,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: ColoredBox(
-        color: getStatusColor(context),
-        child: Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 15),
-              child: Text(_title, style: const TextStyle(color: Colors.white, fontSize: 18)),
-            ),
-            Positioned.fill(
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.white.withOpacity(0.3),
-                  onTap: (){
-                    if (enable) {
-                      _onClick.call();
-                    }
-                  },
-                ),
+      child: SimpleClickEffect(
+        child: ColoredBox(
+          color: getStatusColor(context),
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 15, bottom: 15),
+                child: Text(title, style: const TextStyle(color: Colors.white, fontSize: 18)),
               ),
-            )
-          ],
+            ],
+          ),
         ),
+        onPressed: () {
+          if (isEnable) {
+            onPressed.call();
+          }
+        },
       ),
     );
   }
 
   Color getStatusColor(BuildContext context) {
     final Color statusColor;
-    if (enable) {
-      statusColor = Theme.of(context).primaryColor;
+    if (isEnable) {
+      statusColor = getNotNullablePlatformObject(
+          forAndroid: Theme.of(context).primaryColor,
+          forIOS: CupertinoTheme.of(context).primaryColor
+      );
     } else {
       statusColor = Colors.black12;
     }

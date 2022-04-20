@@ -1,19 +1,39 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
+import 'package:flutter_playground/widget/platform/scaffold.dart';
+
+import '../../widget/platform/app_bar.dart';
 
 class TextStylesView extends StatelessWidget {
   const TextStylesView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: createAppBar(context, "Text styles", true),
+    return PlatformScaffold(
+      isiOSLargeStyle: true,
+      platformAppBar: PlatformAppBar(
+          context: context,
+          title: "Text styles",
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 20, left: 12),
+              child: Text("Default Style", style: TextStyle(fontSize: 20.0),),
+            ),
+            const Divider(height: 1, thickness: 1,),
+
+            wrapText(context, "default text ( TextStyle = null )", null),
+
+            const Padding(
+              padding: EdgeInsets.only(top: 20, left: 12),
+              child: Text("Android Material Styles", style: TextStyle(fontSize: 20.0),),
+            ),
+            const Divider(height: 1, thickness: 1,),
             wrapText(context, "titleLarge", Theme.of(context).textTheme.titleLarge),
             wrapText(context, "titleMedium", Theme.of(context).textTheme.titleMedium),
             wrapText(context, "titleSmall", Theme.of(context).textTheme.titleSmall),
@@ -46,7 +66,20 @@ class TextStylesView extends StatelessWidget {
 
             wrapText(context, "caption", Theme.of(context).textTheme.caption),
 
-            wrapText(context, "without any style", null),
+            const Padding(
+              padding: EdgeInsets.only(top: 20, left: 12),
+              child: Text("iOS Cupertino Styles", style: TextStyle(fontSize: 20.0),),
+            ),
+            const Divider(height: 1, thickness: 1,),
+
+            wrapText(context, "default iOS textStyle", CupertinoTheme.of(context).textTheme.textStyle),
+            wrapText(context, "tabLabelTextStyle", CupertinoTheme.of(context).textTheme.tabLabelTextStyle),
+            wrapText(context, "pickerTextStyle", CupertinoTheme.of(context).textTheme.pickerTextStyle),
+            wrapText(context, "navActionTextStyle", CupertinoTheme.of(context).textTheme.navActionTextStyle),
+            wrapText(context, "actionTextStyle", CupertinoTheme.of(context).textTheme.actionTextStyle),
+            wrapText(context, "dateTimePickerTextStyle", CupertinoTheme.of(context).textTheme.dateTimePickerTextStyle),
+            wrapText(context, "navLargeTitleTextStyle", CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle),
+            wrapText(context, "navTitleTextStyle", CupertinoTheme.of(context).textTheme.navTitleTextStyle),
           ],
         ),
       ),

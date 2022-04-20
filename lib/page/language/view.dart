@@ -1,10 +1,17 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/page/language/model.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
+import 'package:flutter_playground/widget/platform/base.dart';
+import 'package:flutter_playground/widget/platform/button.dart';
+import 'package:flutter_playground/widget/platform/card.dart';
+import 'package:flutter_playground/widget/platform/input_field.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
 
 import '../../generated/l10n.dart';
+import '../../widget/platform/app_bar.dart';
+import '../../widget/platform/scaffold.dart';
 
 class LanguageView extends StatefulWidget {
 
@@ -19,67 +26,72 @@ class LanguageView extends StatefulWidget {
 class _LanguageView extends State<LanguageView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: createAppBar(context, "Multi language", true),
+    return PlatformScaffold(
+      isiOSLargeStyle: true,
+      platformAppBar: PlatformAppBar(
+          context: context,
+          title: "Multi language"
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Current system locale", style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.left,),
+            Text("Current system locale", style: PlatformTextStyles.forTitle(context), textAlign: TextAlign.left,),
             Text(Platform.localeName),
             const SizedBox(height: 20,),
-            Text("Local control", style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.left,),
+            Text("Local control", style: PlatformTextStyles.forTitle(context), textAlign: TextAlign.left,),
             SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
+                child: PlatformButton(
                     onPressed: () => changeLocal(1),
                     child: const Text("Simplified Chinese")
                 )
             ),
             SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
+                child: PlatformButton(
                     onPressed: () => changeLocal(2),
                     child: const Text("Traditional Chinese")
                 )
             ),
             SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
+                child: PlatformButton(
                     onPressed: () => changeLocal(0),
                     child: const Text("English")
                 )
             ),
             const SizedBox(height: 20,),
-            Text("Regular text", style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.left,),
+            Text("Regular text", style: PlatformTextStyles.forTitle(context), textAlign: TextAlign.left,),
             SizedBox(
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.only(top: 12, bottom: 12),
-                child: Card(
-                  color: Theme.of(context).cardColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      children: [
-                        Text(S.of(context).whatsTheWeather, style: Theme.of(context).textTheme.bodyText1),
-                        Text(S.of(context).missingOtherTranslate, style: Theme.of(context).textTheme.bodyText1),
-                      ],
-                    ),
+                child: PlatformCardView(
+                  cardColor: getNotNullablePlatformObject(
+                      forAndroid: Theme.of(context).primaryColor.withOpacity(0.2),
+                      forIOS: CupertinoTheme.of(context).primaryColor.withOpacity(0.2)
+                  ),
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      Text(S.of(context).whatsTheWeather, style: PlatformTextStyles.forContent(context)),
+                      Text(S.of(context).missingOtherTranslate, style: PlatformTextStyles.forContent(context)),
+                    ],
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 20,),
-            Text("Text with placeholder", style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.left,),
+            Text("Text with placeholder", style: PlatformTextStyles.forTitle(context), textAlign: TextAlign.left,),
             Row(
               children: [
                 Flexible(
-                    child: TextField(
+                    child: PlatformInputField(
                       decoration: const InputDecoration(
-                        label: Text("placeholder 1"),
+                        hintText: "placeholder 1",
                       ),
                       onChanged: (text) {
                         setState(() {
@@ -90,9 +102,9 @@ class _LanguageView extends State<LanguageView> {
                 ),
                 const SizedBox(width: 10,),
                 Flexible(
-                    child: TextField(
+                    child: PlatformInputField(
                       decoration: const InputDecoration(
-                        label: Text("placeholder 2"),
+                        hintText: "placeholder 2",
                       ),
                       onChanged: (text) {
                         setState(() {
@@ -107,19 +119,23 @@ class _LanguageView extends State<LanguageView> {
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.only(top: 12, bottom: 12),
-                child: Card(
-                  color: Theme.of(context).cardColor,
-                  child: Padding(
+                child: PlatformCardView(
+                    cardColor: getNotNullablePlatformObject(
+                        forAndroid: Theme.of(context).primaryColor.withOpacity(0.2),
+                        forIOS: CupertinoTheme.of(context).primaryColor.withOpacity(0.2)
+                    ),
                     padding: const EdgeInsets.all(12),
                     child: Column(
                       children: [
-                        Text(S.of(context).placeHolderTesting(widget.model.get(1), widget.model.get(2)), style: Theme.of(context).textTheme.bodyText1),
+                        Text(
+                            S.of(context).placeHolderTesting(widget.model.get(1), widget.model.get(2)),
+                            style: PlatformTextStyles.forContent(context)
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

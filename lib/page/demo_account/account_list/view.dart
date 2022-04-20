@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/base/platform_control.dart';
 import 'package:flutter_playground/page/demo_account/account_list/currency_select_dialog.dart';
 import 'package:flutter_playground/page/demo_account/account_list/view_model.dart';
 import 'package:flutter_playground/page/demo_account/account_list/widgets.dart';
@@ -9,16 +11,19 @@ import 'package:flutter_playground/page/demo_account/models/currency.dart';
 import 'package:flutter_playground/page/demo_account/verify/view.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widget/app_bar.dart';
+import '../../../widget/platform/app_bar.dart';
+import '../../../widget/platform/platform_extension.dart';
+import '../../../widget/platform/scaffold.dart';
+import 'currency_select_action_sheet.dart';
 
 class AccountListView extends StatefulWidget {
   const AccountListView({Key? key}) : super(key: key);
+
   @override
   State createState() => _AccountListView();
 }
 
 class _AccountListView extends State<AccountListView> {
-
   final int _maxAccountCardNumber = 5;
 
   // first focus node is for "Account number" input field
@@ -41,8 +46,9 @@ class _AccountListView extends State<AccountListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: createAppBar(context, "Account management", true),
+    return PlatformScaffold(
+      isiOSLargeStyle: false,
+      platformAppBar: PlatformAppBar(context: context, title: "Account management"),
       body: ChangeNotifierProvider(
         create: (context) => AccountListViewModel(),
         child: Consumer<AccountListViewModel>(
@@ -58,43 +64,49 @@ class _AccountListView extends State<AccountListView> {
               children: [
                 Expanded(
                     child: ListView.separated(
-                      controller: _scrollController,
-                      separatorBuilder: (context, index) => const SizedBox(height: 8,),
-                      padding: const EdgeInsets.all(8),
-                      itemBuilder: (context, index) {
-                        // for the last one, should be "add account" button
-                        if (index == viewModel.displayList.length) {
-                          final bool reachLimit = viewModel.displayList.length == _maxAccountCardNumber;
-                          return AddAccountButtonView(reachLimit, () {
-                            _getCurrentActiveFocus()?.unfocus();
-                            _addNewAccountCard(viewModel, true);
-                          });
-                        }
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(8),
+                        controller: _scrollController,
+                        // the last one should be "add account" button
+                        itemCount: viewModel.displayList.length + 1,
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 8,
+                        ),
+                        itemBuilder: (context, index) {
+                          // for the last one, should be "add account" button
+                          if (index == viewModel.displayList.length) {
+                            final bool reachLimit =
+                                viewModel.displayList.length == _maxAccountCardNumber;
+                            return AddAccountButtonView(reachLimit, () {
+                              _getCurrentActiveFocus()?.unfocus();
+                              _addNewAccountCard(viewModel, true);
+                            });
+                          }
 
-                        final AccountDisplayModel model = viewModel.displayList[index];
-                        final FocusNode? accountNoFocusNode = _itemInputFocusNodes[model.account.id];
-                        if (accountNoFocusNode == null) {
-                          // if we cant get focus, then we just ignore it
-                          return const SizedBox.shrink();
-                        }
+                          final AccountDisplayModel model =
+                              viewModel.displayList[index];
+                          final FocusNode? accountNoFocusNode =
+                              _itemInputFocusNodes[model.account.id];
+                          if (accountNoFocusNode == null) {
+                            // if we cant get focus, then we just ignore it
+                            return const SizedBox.shrink();
+                          }
 
-                        return AccountCardView(
-                            accountNoFocusNode,
-                            _getCurrentActiveFocus(),
-                            viewModel,
-                            () => _onSelectAccountType(context, viewModel, model.account),
-                            () => _onSelectCurrencyType(context, viewModel, model.account),
-                            index
-                        );
+                          return AccountCardView(
+                              index: index,
+                              accountViewModel: viewModel,
+                              accountInputFocusNode: accountNoFocusNode,
+                              onUnFocusCurrentActiveFocusNode: () => _getCurrentActiveFocus()?.unfocus(),
+                              onSelectAccountType: () => _onSelectAccountType(context, viewModel, model.account),
+                              onSelectCurrencyType: () => _onSelectCurrencyType(context, viewModel, model.account)
+                          );
                       },
-                      // the last one should be "add account" button
-                      itemCount: viewModel.displayList.length + 1,
                     )
                 ),
                 SubmitButton(
-                    "Submit",
-                    viewModel.canSubmit,
-                    () => _submit(viewModel)
+                    title: "Submit",
+                    isEnable: viewModel.canSubmit,
+                    onPressed: () => _submit(viewModel)
                 )
               ],
             );
@@ -107,11 +119,11 @@ class _AccountListView extends State<AccountListView> {
   /// submit all account
   void _submit(AccountListViewModel viewModel) {
     _getCurrentActiveFocus()?.unfocus();
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => VerifyPageView((viewModel.readOnlyAccountList)))
-    );
+    PlatformNavigator.pushByPlatform(context, VerifyPageView((viewModel.readOnlyAccountList)));
   }
 
+  /// get current focus node
+  /// return [Null] if not found
   FocusNode? _getCurrentActiveFocus() {
     for (FocusNode item in _itemInputFocusNodes.values) {
       if (item.hasFocus || item.hasPrimaryFocus) {
@@ -133,11 +145,8 @@ class _AccountListView extends State<AccountListView> {
   /// scroll content list down to bottom
   void _scrollDown2Bottom() {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut
-      );
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200), curve: Curves.easeOut);
     });
   }
 
@@ -145,7 +154,7 @@ class _AccountListView extends State<AccountListView> {
   /// jump to page [AccountTypeView] to let use choose their account type
   /// @param [index] which item has been clicked
   void _onSelectAccountType(BuildContext context, AccountListViewModel viewModel, Account account) async {
-    final AccountTypeDetail? result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AccountTypeView()));
+    final AccountTypeDetail? result = await PlatformNavigator.pushByPlatform(context, AccountTypeView());
     if (result == null) {
       // when user click back button will return NULL result
       return;
@@ -158,14 +167,50 @@ class _AccountListView extends State<AccountListView> {
 
   /// open a dialog to let user to select currency type
   void _onSelectCurrencyType(BuildContext context, AccountListViewModel viewModel, Account account) {
+
+    if (PlatformControl.self.isRunningAndroid()) {
+      _showAndroidCurrencySelector(context, viewModel, account);
+      return;
+    }
+
+    _showIOSCurrencySelector(context, viewModel, account);
+  }
+
+  /// display [CupertinoActionSheet] for IOS user to select currency type
+  void _showIOSCurrencySelector(BuildContext context, AccountListViewModel viewModel, Account account) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (dialogContext) {
+          return CurrencySelectionActionSheet(
+            title: "Select currency",
+            message: "Please select currency type of this account",
+            lastSelected: account.currency,
+            onCurrencySelected: (Currency selectedCurrency) {
+              if (selectedCurrency == account.currency) {
+                // ignored if clicked one is we already have
+                return;
+              }
+
+              // update viewModel
+              account.updateCurrencyType(selectedCurrency);
+              viewModel.update(account, true);
+              Navigator.pop(dialogContext);
+            },
+          );
+        }
+    );
+  }
+
+  /// display [Dialog] with simple list for Android user to select currency type
+  void _showAndroidCurrencySelector(BuildContext context, AccountListViewModel viewModel, Account account) {
     showDialog(
         context: context,
         builder: (dialogContext) => Dialog(
           child: CurrencySelectionDialogView(
-              "Select currency",
-              account.currency,
+              title: "Select currency",
+              lastSelected: account.currency,
               // callback when user clicked currency item
-              (Currency selectedCurrency) {
+              onCurrencySelected: (Currency selectedCurrency) {
                 if (selectedCurrency == account.currency) {
                   // ignored if clicked one is we already have
                   return;

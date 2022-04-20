@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_playground/base/base_remote_view_model.dart';
 import 'package:flutter_playground/page/remote_image/model.dart';
 import 'package:flutter_playground/page/remote_image/view_model.dart';
-import 'package:flutter_playground/widget/app_bar.dart';
+import 'package:flutter_playground/widget/platform/scaffold.dart';
+import 'package:flutter_playground/widget/platform/styles.dart';
 import 'package:provider/provider.dart';
+
+import '../../widget/platform/app_bar.dart';
+import '../../widget/platform/button.dart';
 
 class RemoteImageView extends StatefulWidget {
   const RemoteImageView({Key? key}) : super(key: key);
@@ -14,7 +18,7 @@ class RemoteImageView extends StatefulWidget {
 
 class _RemoteImageView extends State<RemoteImageView> {
 
-  Text statusOfViewModel(RemoteImageViewModel viewModel) {
+  Widget statusOfViewModel(RemoteImageViewModel viewModel) {
     final String text;
     switch (viewModel.currentStatus()) {
       case Status.initialized:
@@ -31,7 +35,10 @@ class _RemoteImageView extends State<RemoteImageView> {
         break;
     }
 
-    return Text(text, style: Theme.of(context).textTheme.bodyMedium);
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Text(text, style: PlatformTextStyles.forContent(context)),
+    );
   }
 
   Widget imageFromViewModel(RemoteImageViewModel viewModel) {
@@ -49,8 +56,12 @@ class _RemoteImageView extends State<RemoteImageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: createAppBar(context, "Remote image", true),
+    return PlatformScaffold(
+      isiOSLargeStyle: false,
+      platformAppBar: PlatformAppBar(
+          context: context,
+          title: "Remote image fetching"
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: ChangeNotifierProvider(
@@ -63,7 +74,7 @@ class _RemoteImageView extends State<RemoteImageView> {
                   statusOfViewModel(viewModel),
                   SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
+                      child: PlatformButton(
                           onPressed: () => viewModel.fetch(),
                           child: const Text("Download image now !!")
                       )
