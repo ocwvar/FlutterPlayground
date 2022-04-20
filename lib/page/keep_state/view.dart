@@ -34,9 +34,8 @@ class _KeepStateView extends State<KeepStateView> {
             Text(_text),
             const SizedBox(height: 20,),
             PlatformInputField(
-              iosHint: "Input something here...",
               decoration: const InputDecoration(
-                label: Text("Input something here..."),
+                hintText: "Input something here...",
               ),
               onChanged: (text) {
                 setState(() {

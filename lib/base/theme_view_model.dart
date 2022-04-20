@@ -66,7 +66,8 @@ class ThemeViewModel extends ChangeNotifier {
       brightness: isDark? Brightness.dark : Brightness.light,
       primaryColor: _currentIThemeColor,
       // reference: _CupertinoThemeDefaults@line: 19
-      primaryContrastingColor: CupertinoColors.systemBackground
+      primaryContrastingColor: CupertinoColors.systemBackground,
+      scaffoldBackgroundColor: isDark? const Color.fromARGB(255, 10, 10, 10) : const Color.fromARGB(255, 240, 240, 240)
     );
   }
 

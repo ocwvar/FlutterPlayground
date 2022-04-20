@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/widget/platform/base.dart';
 
-class PlatformInputField extends BasePlatformWidget<TextField, CupertinoTextField> {
+class PlatformInputField extends BasePlatformWidget<TextField, Widget> {
 
   final InputDecoration? decoration;
   final Function(String)? onChanged;
@@ -12,9 +12,7 @@ class PlatformInputField extends BasePlatformWidget<TextField, CupertinoTextFiel
   final bool autofocus;
   final FocusNode? focusNode;
   final TextEditingController? controller;
-
-  final String iosHint;
-  final TextStyle? iosHintTextStyle;
+  final TextInputType? keyboardType;
 
   const PlatformInputField(
     {
@@ -27,8 +25,7 @@ class PlatformInputField extends BasePlatformWidget<TextField, CupertinoTextFiel
       this.autofocus = false,
       this.focusNode,
       this.controller,
-      this.iosHint = "",
-      this.iosHintTextStyle
+      this.keyboardType
     }) : super(key: key);
 
   @override
@@ -36,6 +33,7 @@ class PlatformInputField extends BasePlatformWidget<TextField, CupertinoTextFiel
     return TextField(
       textInputAction: textInputAction,
       controller: controller,
+      keyboardType: keyboardType,
       focusNode: focusNode,
       decoration: decoration,
       onChanged: onChanged,
@@ -46,27 +44,61 @@ class PlatformInputField extends BasePlatformWidget<TextField, CupertinoTextFiel
   }
 
   @override
-  CupertinoTextField createIOSObject(BuildContext arg) {
-    TextStyle? defaultIosTextStyle;
-    if (iosHint.isNotEmpty && iosHintTextStyle == null) {
-      defaultIosTextStyle = TextStyle(
+  Widget createIOSObject(BuildContext arg) {
+    TextStyle? defaultIosHintTextStyle;
+    final String? hint = decoration?.hintText;
+    if (hint != null) {
+      defaultIosHintTextStyle = TextStyle(
         fontWeight: FontWeight.w300,
         color: CupertinoTheme.of(arg).textTheme.textStyle.color?.withOpacity(0.4)
       );
     }
 
-    return CupertinoTextField(
-      padding: const EdgeInsets.all(8),
-      placeholder: iosHint,
-      placeholderStyle: iosHintTextStyle ?? defaultIosTextStyle,
-      textInputAction: textInputAction,
-      controller: controller,
-      focusNode: focusNode,
-      onChanged: onChanged,
-      maxLength: maxLength,
-      maxLines: maxLines,
-      autofocus: autofocus,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // label
+        _getIOSHeader(arg),
+        CupertinoTextField(
+          padding: const EdgeInsets.all(8),
+          placeholder: hint,
+          placeholderStyle: defaultIosHintTextStyle,
+          textInputAction: textInputAction,
+          keyboardType: keyboardType,
+          controller: controller,
+          focusNode: focusNode,
+          onChanged: onChanged,
+          maxLength: maxLength,
+          maxLines: maxLines,
+          autofocus: autofocus,
+        )
+      ],
     );
+  }
+
+  Widget _getIOSHeader(BuildContext context) {
+    // label
+    final Widget? labelWidget = decoration?.label;
+    final String? labelText = decoration?.labelText;
+
+    // error
+    final String? errorText = decoration?.errorText;
+    final TextStyle? errorTextStyle = decoration?.errorStyle;
+
+    final Widget headerWidget;
+
+    // check error first
+    if (errorText != null) {
+      headerWidget = Text(errorText, style: TextStyle(fontSize: 14, color: errorTextStyle?.color ?? Colors.red),);
+    } else if (labelWidget != null) {
+      headerWidget = labelWidget;
+    } else if (labelText != null) {
+      headerWidget = Text(labelText, style: const TextStyle(fontSize: 14),);
+    } else {
+      headerWidget = const SizedBox.shrink();
+    }
+
+    return headerWidget;
   }
 
 }

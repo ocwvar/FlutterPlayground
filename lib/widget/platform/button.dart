@@ -2,6 +2,93 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/widget/platform/base.dart';
 
+class PlatformIconTextButton extends BasePlatformWidget<Widget, CupertinoButton> {
+
+  final Icon icon;
+  final String text;
+  final EdgeInsetsGeometry padding;
+  final double paddingOfIconToText;
+  final Function() onPressed;
+
+  final bool isDisable;
+
+  const PlatformIconTextButton({
+    Key? key,
+    required this.icon,
+    required this.text,
+    required this.padding,
+    required this.paddingOfIconToText,
+    required this.onPressed,
+    required this.isDisable
+  }) : super(key: key);
+
+  @override
+  Widget createAndroidObject(BuildContext arg) {
+    return InkWell(
+      onTap: () {
+        if (!isDisable) {
+          onPressed.call();
+        }
+      },
+      child: Padding(
+        padding: padding,
+        child: Opacity(
+          opacity: isDisable? 0.4 : 1.0,
+          child: Row(
+            children: [
+              icon,
+              SizedBox(width: paddingOfIconToText,),
+              Text(text)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  CupertinoButton createIOSObject(BuildContext arg) {
+    return CupertinoButton(
+        onPressed: isDisable ? null : onPressed,
+        child: Padding(
+          padding: padding,
+          child: Row(
+            children: [
+              icon,
+              SizedBox(width: paddingOfIconToText,),
+              Text(text)
+            ],
+          ),
+        )
+    );
+  }
+
+
+}
+
+class PlatformIconButton extends BasePlatformWidget<IconButton, CupertinoButton> {
+
+  final Icon icon;
+  final Function() onPressed;
+
+  const PlatformIconButton({
+    Key? key,
+    required this.icon,
+    required this.onPressed
+  }) : super(key: key);
+
+  @override
+  IconButton createAndroidObject(BuildContext arg) {
+    return IconButton(onPressed: onPressed, icon: icon);
+  }
+
+  @override
+  CupertinoButton createIOSObject(BuildContext arg) {
+    return CupertinoButton(child: icon, onPressed: onPressed,);
+  }
+
+}
+
 class PlatformButton extends BasePlatformWidget<ElevatedButton, Widget> {
 
   final Widget child;

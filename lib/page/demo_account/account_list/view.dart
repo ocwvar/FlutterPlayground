@@ -43,7 +43,7 @@ class _AccountListView extends State<AccountListView> {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      isiOSLargeStyle: true,
+      isiOSLargeStyle: false,
       platformAppBar: PlatformAppBar(context: context, title: "Account management"),
       body: ChangeNotifierProvider(
         create: (context) => AccountListViewModel(),
@@ -86,20 +86,18 @@ class _AccountListView extends State<AccountListView> {
                     }
 
                     return AccountCardView(
-                        accountNoFocusNode,
-                        _getCurrentActiveFocus(),
-                        viewModel,
-                        () => _onSelectAccountType(
-                            context, viewModel, model.account),
-                        () => _onSelectCurrencyType(
-                            context, viewModel, model.account),
-                        index);
+                        index: index,
+                        accountViewModel: viewModel,
+                        accountInputFocusNode: accountNoFocusNode,
+                        onUnFocusCurrentActiveFocusNode: () => _getCurrentActiveFocus()?.unfocus(),
+                        onSelectAccountType: () => _onSelectAccountType(context, viewModel, model.account),
+                        onSelectCurrencyType: () => _onSelectCurrencyType(context, viewModel, model.account)
+                    );
                   },
                   // the last one should be "add account" button
                   itemCount: viewModel.displayList.length + 1,
                 )),
-                SubmitButton(
-                    "Submit", viewModel.canSubmit, () => _submit(viewModel))
+                SubmitButton("Submit", viewModel.canSubmit, () => _submit(viewModel))
               ],
             );
           },
@@ -111,13 +109,13 @@ class _AccountListView extends State<AccountListView> {
   /// submit all account
   void _submit(AccountListViewModel viewModel) {
     _getCurrentActiveFocus()?.unfocus();
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                VerifyPageView((viewModel.readOnlyAccountList))));
+    Navigator.push(context, MaterialPageRoute(
+            builder: (context) => VerifyPageView((viewModel.readOnlyAccountList))
+    ));
   }
 
+  /// get current focus node
+  /// return [Null] if not found
   FocusNode? _getCurrentActiveFocus() {
     for (FocusNode item in _itemInputFocusNodes.values) {
       if (item.hasFocus || item.hasPrimaryFocus) {
@@ -147,8 +145,7 @@ class _AccountListView extends State<AccountListView> {
   /// call when user clicked "Account Type"
   /// jump to page [AccountTypeView] to let use choose their account type
   /// @param [index] which item has been clicked
-  void _onSelectAccountType(BuildContext context,
-      AccountListViewModel viewModel, Account account) async {
+  void _onSelectAccountType(BuildContext context, AccountListViewModel viewModel, Account account) async {
     final AccountTypeDetail? result = await Navigator.push(
         context, MaterialPageRoute(builder: (context) => AccountTypeView()));
     if (result == null) {
@@ -162,8 +159,7 @@ class _AccountListView extends State<AccountListView> {
   }
 
   /// open a dialog to let user to select currency type
-  void _onSelectCurrencyType(
-      BuildContext context, AccountListViewModel viewModel, Account account) {
+  void _onSelectCurrencyType(BuildContext context, AccountListViewModel viewModel, Account account) {
     showDialog(
         context: context,
         builder: (dialogContext) => Dialog(

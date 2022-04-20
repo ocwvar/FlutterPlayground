@@ -90,9 +90,8 @@ class _LanguageView extends State<LanguageView> {
               children: [
                 Flexible(
                     child: PlatformInputField(
-                      iosHint: "placeholder 1",
                       decoration: const InputDecoration(
-                        label: Text("placeholder 1"),
+                        hintText: "placeholder 1",
                       ),
                       onChanged: (text) {
                         setState(() {
@@ -104,9 +103,8 @@ class _LanguageView extends State<LanguageView> {
                 const SizedBox(width: 10,),
                 Flexible(
                     child: PlatformInputField(
-                      iosHint: "placeholder 2",
                       decoration: const InputDecoration(
-                        label: Text("placeholder 2"),
+                        hintText: "placeholder 2",
                       ),
                       onChanged: (text) {
                         setState(() {
