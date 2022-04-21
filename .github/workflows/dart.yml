@@ -13,7 +13,7 @@ on:
 
 jobs:
   build:
-    name: "Begin to build"
+    name: "Build & Release"
     runs-on: ubuntu-latest
     steps:
       # check out the code
@@ -37,7 +37,11 @@ jobs:
 
       # begin to build
       - name: "Begin run build_release.sh for Android"
-        run: android/build_release.sh ${{ secrets.BUILD_SIGN_PASSWORD }} ${{ secrets.BUILD_SIGN_ALIAS }} ${{ secrets.BUILD_SIGN_BASE64_SIGN_FILE }}
+        env:
+          PWD: ${{ secrets.BUILD_SIGN_PASSWORD }}
+          ALIAS: ${{ secrets.BUILD_SIGN_ALIAS }}
+          ENCODED_SIGN_FILE: ${{ secrets.BUILD_SIGN_BASE64_SIGN_FILE }}
+        run: android/build_release.sh env.PWD env.ALIAS env.ENCODED_SIGN_FILE
 
       # push to release
       - name: "Push to Releases"
