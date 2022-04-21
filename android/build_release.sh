@@ -5,7 +5,7 @@ cd android/
 echo "Writing secrets to file"
 
 # write sign config to android/key.properties
-echo pd=$PWD >> key.properties
+echo pd=$PASS >> key.properties
 echo aliasName=$ALIAS >> key.properties
 echo signFilePath=../$SIGN_FILE_NAME >> key.properties
 

@@ -38,7 +38,7 @@ jobs:
       # begin to build
       - name: "Begin to build release APK "
         env:
-          PWD: ${{ secrets.BUILD_SIGN_PASSWORD }}
+          PASS: ${{ secrets.BUILD_SIGN_PASSWORD }}
           ALIAS: ${{ secrets.BUILD_SIGN_ALIAS_NAME }}
           SIGN_FILE_NAME: ${{ secrets.BUILD_SIGN_FILE_NAME }}
           ENCODED_SIGN_FILE: ${{ secrets.BUILD_SIGN_BASE64_SIGN_FILE }}
