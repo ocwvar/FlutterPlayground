@@ -41,7 +41,8 @@ jobs:
           PWD: ${{ secrets.BUILD_SIGN_PASSWORD }}
           ALIAS: ${{ secrets.BUILD_SIGN_ALIAS }}
           ENCODED_SIGN_FILE: ${{ secrets.BUILD_SIGN_BASE64_SIGN_FILE }}
-        run: android/build_release.sh $PWD $ALIAS $ENCODED_SIGN_FILE
+          SIGN_FILE_NAME: ${{ secrets.BUILD_SIGN_FILE_NAME }}
+        run: android/build_release.sh $PWD $ALIAS $SIGN_FILE_NAME $ENCODED_SIGN_FILE
 
       # push to release
       - name: "Push to Releases"

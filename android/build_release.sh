@@ -20,5 +20,5 @@ echo "Begin to build release APK"
 flutter build apk
 
 echo "Delete sign file and properties file"
-rm -rf sign
+rm -rf "$signFileName"
 rm -rf key.properties
