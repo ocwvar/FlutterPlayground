@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../widget/platform/app_bar.dart';
 import '../../widget/platform/button.dart';
+import '../../widget/platform/card.dart';
 
 class RemoteImageView extends StatefulWidget {
   const RemoteImageView({Key? key}) : super(key: key);
@@ -47,10 +48,9 @@ class _RemoteImageView extends State<RemoteImageView> {
       return const SizedBox(width: 0, height: 0);
     }
 
-    return Card(
+    return PlatformCardView(
       child: Image.memory(data.bytes),
-      clipBehavior: Clip.hardEdge,
-      elevation: 5.0,
+      padding: EdgeInsets.zero,
     );
   }
 
