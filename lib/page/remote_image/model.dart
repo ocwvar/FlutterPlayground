@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 class RemoteImageModel {
 
   final Dio _client = Dio();
-  final String _imageUrl = "https://images.unsplash.com/photo-1559583985-c80d8ad9b29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8MXwxMDY1OTc2fHxlbnwwfHx8fA%3D%3D&w=1000&q=80";
+  final String _imageUrl = "https://storage.googleapis.com/cms-storage-bucket/c823e53b3a1a7b0d36a9.png";
 
   Future<RemoteImageModelData> fetch() async {
     final Response<List<int>> response = await _client.get<List<int>>(
