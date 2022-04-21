@@ -14,3 +14,7 @@ ls -l ./
 
 # go back to root folder
 cd ..
+
+# begin to build
+echo "Start release APK build"
+flutter build apk
