@@ -43,9 +43,9 @@ jobs:
           SIGN_FILE_NAME: ${{ secrets.BUILD_SIGN_FILE_NAME }}
           ENCODED_SIGN_FILE: ${{ secrets.BUILD_SIGN_BASE64_SIGN_FILE }}
         run: |
-          echo $password=PWD >> android/key.properties
-          echo $aliasName=ALIAS >> android/key.properties
-          echo $signFilePath=../SIGN_FILE_NAME >> android/key.properties
+          echo password=$PWD >> android/key.properties
+          echo aliasName=$ALIAS >> android/key.properties
+          echo signFilePath=../$SIGN_FILE_NAME >> android/key.properties
           echo $ENCODED_SIGN_FILE >> android/key.temp
 
       - name: "Begin to build"
