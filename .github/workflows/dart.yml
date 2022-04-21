@@ -49,5 +49,5 @@ jobs:
       - name: "Push to Releases"
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/*"
+          artifacts: "build/app/outputs/apk/release/*,build/app/outputs/bundle/release/*"
           token: ${{ secrets.BUILD_TOKEN }}
