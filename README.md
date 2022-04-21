@@ -1,9 +1,13 @@
-![](https://storage.googleapis.com/cms-storage-bucket/c823e53b3a1a7b0d36a9.png)
+<p align="center">
+<img src="https://storage.googleapis.com/cms-storage-bucket/c823e53b3a1a7b0d36a9.png" /> 
+</p>
+
 
 ![example branch parameter](https://github.com/ocwvar/FlutterPlayground/actions/workflows/dart.yml/badge.svg)
 
 [<img src="https://raw.githubusercontent.com/steverichey/google-play-badge-svg/master/img/en_get.svg" width="200"/>](https://play.google.com/store/apps/details?id=com.ocwvar.flutter_playground)
 [<img src="https://raw.githubusercontent.com/deckerst/common/main/assets/get-it-on-github.png" width="200"/>](https://github.com/ocwvar/FlutterPlayground/releases/latest)
+
 
 # Flutter Playground
 A flutter application that has various technical demonstrations
