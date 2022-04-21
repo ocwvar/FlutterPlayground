@@ -3,13 +3,18 @@ cd android/
 
 # all those env params are set in dart.yml
 echo "Writing secrets to file"
+
+# write sign config to android/key.properties
 echo password=$PWD >> key.properties
 echo aliasName=$ALIAS >> key.properties
 echo signFilePath=../$SIGN_FILE_NAME >> key.properties
-echo $ENCODED_SIGN_FILE >> key.temp
 
 echo "Decoding SignFile Base64 and output to local"
-base64 --decode key.temp > sign.key
+# write encoded base64 text to android/key.temp for decode later
+echo $ENCODED_SIGN_FILE >> key.temp
+
+# begin decode base64 text and output to $SIGN_FILE_NAME
+base64 --decode key.temp > $SIGN_FILE_NAME
 ls -l ./
 
 # go back to root folder
