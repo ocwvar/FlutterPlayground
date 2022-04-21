@@ -24,7 +24,7 @@ jobs:
       - name: "Output parameter to files "
         env:
           PWD: ${{ secrets.BUILD_SIGN_PASSWORD }}
-          ALIAS: ${{ secrets.BUILD_SIGN_ALIAS }}
+          ALIAS: ${{ secrets.BUILD_SIGN_ALIAS_NAME }}
           SIGN_FILE_NAME: ${{ secrets.BUILD_SIGN_FILE_NAME }}
           ENCODED_SIGN_FILE: ${{ secrets.BUILD_SIGN_BASE64_SIGN_FILE }}
         run: |
@@ -33,8 +33,8 @@ jobs:
           echo signFilePath=../$SIGN_FILE_NAME >> android/key.properties
           echo $ENCODED_SIGN_FILE >> android/key.temp
 
-#      - name: "Begin to build"
-#        run: android/build_release.sh
+      - name: "Begin to build"
+        run: android/build_release.sh
 #
 #      # setup java
 #      - name: "Setup java"
