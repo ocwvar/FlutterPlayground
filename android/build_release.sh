@@ -20,5 +20,8 @@ base64 --decode key.temp > $SIGN_FILE_NAME
 cd ..
 
 # begin to build
-echo "Start release APK build"
+echo "Begin to build release APK"
 flutter build apk
+
+echo "Begin to build release AppBundle"
+flutter build appbundle
