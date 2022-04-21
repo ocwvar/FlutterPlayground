@@ -60,9 +60,9 @@ android {
     signingConfigs {
         release {
             keyAlias keyProperties['aliasName']
-            keyPassword keyProperties['password']
+            keyPassword keyProperties['pd']
             storeFile keyProperties['signFilePath'] ? file(keyProperties['signFilePath']) : null
-            storePassword keyProperties['password']
+            storePassword keyProperties['pd']
         }
     }
 

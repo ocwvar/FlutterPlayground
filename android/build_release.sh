@@ -5,7 +5,7 @@ cd android/
 echo "Writing secrets to file"
 
 # write sign config to android/key.properties
-echo password=$PWD >> key.properties
+echo pd=$PWD >> key.properties
 echo aliasName=$ALIAS >> key.properties
 echo signFilePath=../$SIGN_FILE_NAME >> key.properties
 
@@ -16,6 +16,7 @@ echo $ENCODED_SIGN_FILE >> key.temp
 # begin decode base64 text and output to $SIGN_FILE_NAME
 base64 --decode key.temp > $SIGN_FILE_NAME
 ls -l ./
+cat key.properties
 
 # go back to root folder
 cd ..
