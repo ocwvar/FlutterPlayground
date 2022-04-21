@@ -2,7 +2,8 @@
 
 ![example branch parameter](https://github.com/ocwvar/FlutterPlayground/actions/workflows/dart.yml/badge.svg)
 
-[Download released APKs](https://github.com/ocwvar/FlutterPlayground/releases)
+[<img src="https://raw.githubusercontent.com/steverichey/google-play-badge-svg/master/img/en_get.svg" width="200"/>](https://play.google.com/store/apps/details?id=com.ocwvar.flutter_playground)
+[<img src="https://raw.githubusercontent.com/deckerst/common/main/assets/get-it-on-github.png" width="200"/>](https://github.com/ocwvar/FlutterPlayground/releases/latest)
 
 # Flutter Playground
 A flutter application that has various technical demonstrations
