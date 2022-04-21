@@ -20,6 +20,21 @@ jobs:
       - name: "Checkout codes"
         uses: actions/checkout@v3
 
+      # setup java
+      - name: "Setup java"
+        uses: actions/setup-java@v3.1.1
+        with:
+          java-version: "11"
+          distribution: "temurin"
+
+      # setup flutter
+      - name: "Setup flutter"
+        uses: subosito/flutter-action@v2.3.0
+
+      # setup all dependencies
+      - name: "Install dependencies"
+        run: flutter pub get
+
       # begin to build
       - name: "Begin to build release APK "
         env:
@@ -28,42 +43,11 @@ jobs:
           SIGN_FILE_NAME: ${{ secrets.BUILD_SIGN_FILE_NAME }}
           ENCODED_SIGN_FILE: ${{ secrets.BUILD_SIGN_BASE64_SIGN_FILE }}
         run: android/build_release.sh
-#
-#      # setup java
-#      - name: "Setup java"
-#        uses: actions/setup-java@v3.1.1
-#        with:
-#          java-version: "11"
-#          distribution: "temurin"
-#
-#      # setup flutter
-#      - name: "Setup flutter"
-#        uses: subosito/flutter-action@v2.3.0
-#
-#      # setup all dependencies
-#      - name: "Install dependencies"
-#        run: flutter pub get
-#
-#      # begin to build
-#      - name: "Output parameter to files "
-#        env:
-#          PWD: ${{ secrets.BUILD_SIGN_PASSWORD }}
-#          ALIAS: ${{ secrets.BUILD_SIGN_ALIAS }}
-#          SIGN_FILE_NAME: ${{ secrets.BUILD_SIGN_FILE_NAME }}
-#          ENCODED_SIGN_FILE: ${{ secrets.BUILD_SIGN_BASE64_SIGN_FILE }}
-#        run: |
-#          echo password=$PWD >> android/key.properties
-#          echo aliasName=$ALIAS >> android/key.properties
-#          echo signFilePath=../$SIGN_FILE_NAME >> android/key.properties
-#          echo $ENCODED_SIGN_FILE >> android/key.temp
-#
-#      - name: "Begin to build"
-#        run: android/build_release.sh
-#
-#      # push to release
-#      - name: "Push to Releases"
-#        uses: ncipollo/release-action@v1
-#        with:
-#          artifacts: "build/app/outputs/apk/release/*"
-#          tag: v${{ github.run_number }}
-#          token: ${{ secrets.BUILD_TOKEN }}
+
+      # push to release
+      - name: "Push to Releases"
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/release/*"
+          tag: v${{ github.run_number }}
+          token: ${{ secrets.BUILD_TOKEN }}
