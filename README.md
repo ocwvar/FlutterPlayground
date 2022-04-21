@@ -29,3 +29,21 @@ maybe someday we will have that IPA release :D
 ## Also
 Github actions supported, you can checkout this [YML file](https://github.com/ocwvar/FlutterPlayground/blob/master/.github/workflows/dart.yml)
 and also the shell [scrip file](https://github.com/ocwvar/FlutterPlayground/blob/master/android/build_release.sh) that build the APK
+
+## Screenshots
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/1.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/2.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/3.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/4.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/5.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/6.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/7.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/8.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/9.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/10.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/11.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/12.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/13.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/14.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/15.png)
+![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/16.png)
