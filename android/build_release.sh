@@ -15,8 +15,6 @@ echo $ENCODED_SIGN_FILE >> key.temp
 
 # begin decode base64 text and output to $SIGN_FILE_NAME
 base64 --decode key.temp > $SIGN_FILE_NAME
-ls -l ./
-cat key.properties
 
 # go back to root folder
 cd ..
