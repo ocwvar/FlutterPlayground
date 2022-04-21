@@ -33,7 +33,7 @@ maybe someday we will have that IPA release :D
 
 ## Also
 Github actions supported, you can checkout this [YML file](https://github.com/ocwvar/FlutterPlayground/blob/master/.github/workflows/dart.yml)
-and also the shell [scrip file](https://github.com/ocwvar/FlutterPlayground/blob/master/android/build_release.sh) that build the APK
+and also the shell [script file](https://github.com/ocwvar/FlutterPlayground/blob/master/android/build_release.sh) that build the APK
 
 ## Screenshots
 ![](https://raw.githubusercontent.com/ocwvar/FlutterPlayground/master/images/1.png)
